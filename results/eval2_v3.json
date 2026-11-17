@@ -1,0 +1,215 @@
+{
+ "status": {
+  "hackaprompt_inj": "FAILED DatasetNotFoundError: Dataset 'hackaprompt/hackaprompt-dataset' is a gated dataset on the Hub. You must be authenticated to access it.",
+  "wild_jailbreak": "ok: 790 rows (of 1404 loaded)",
+  "llmail_inj": "ok: 2000 rows (of 19999 loaded)",
+  "wild_regular_benign": "ok: 2000 rows (of 13641 loaded)",
+  "oasst_benign": "ok: 2000 rows (of 3431 loaded)",
+  "dolly_benign": "ok: 2000 rows (of 14867 loaded)"
+ },
+ "base": {
+  "ALL": {
+   "n": 8790,
+   "tp": 864,
+   "fn": 1926,
+   "fp": 241,
+   "tn": 5759,
+   "tpr": 0.3096774193548387,
+   "fpr": 0.04016666666666667,
+   "acc": 0.7534698521046644,
+   "bal_acc": 0.634755376344086,
+   "auroc": 0.9253186977299882
+  },
+  "dolly_benign": {
+   "n": 2000,
+   "tp": 0,
+   "fn": 0,
+   "fp": 4,
+   "tn": 1996,
+   "tpr": null,
+   "fpr": 0.002,
+   "acc": 0.998
+  },
+  "llmail_inj": {
+   "n": 2000,
+   "tp": 326,
+   "fn": 1674,
+   "fp": 0,
+   "tn": 0,
+   "tpr": 0.163,
+   "fpr": null,
+   "acc": 0.163
+  },
+  "oasst_benign": {
+   "n": 2000,
+   "tp": 0,
+   "fn": 0,
+   "fp": 9,
+   "tn": 1991,
+   "tpr": null,
+   "fpr": 0.0045,
+   "acc": 0.9955
+  },
+  "wild_jailbreak": {
+   "n": 790,
+   "tp": 538,
+   "fn": 252,
+   "fp": 0,
+   "tn": 0,
+   "tpr": 0.6810126582278481,
+   "fpr": null,
+   "acc": 0.6810126582278481
+  },
+  "wild_regular_benign": {
+   "n": 2000,
+   "tp": 0,
+   "fn": 0,
+   "fp": 228,
+   "tn": 1772,
+   "tpr": null,
+   "fpr": 0.114,
+   "acc": 0.886
+  },
+  "MACRO": {
+   "tpr": 0.42200632911392405,
+   "fpr": 0.04016666666666667
+  }
+ },
+ "edit": {
+  "ALL": {
+   "n": 8790,
+   "tp": 804,
+   "fn": 1986,
+   "fp": 228,
+   "tn": 5772,
+   "tpr": 0.28817204301075267,
+   "fpr": 0.038,
+   "acc": 0.7481228668941979,
+   "bal_acc": 0.6250860215053763,
+   "auroc": 0.9240779868578256
+  },
+  "dolly_benign": {
+   "n": 2000,
+   "tp": 0,
+   "fn": 0,
+   "fp": 3,
+   "tn": 1997,
+   "tpr": null,
+   "fpr": 0.0015,
+   "acc": 0.9985
+  },
+  "llmail_inj": {
+   "n": 2000,
+   "tp": 269,
+   "fn": 1731,
+   "fp": 0,
+   "tn": 0,
+   "tpr": 0.1345,
+   "fpr": null,
+   "acc": 0.1345
+  },
+  "oasst_benign": {
+   "n": 2000,
+   "tp": 0,
+   "fn": 0,
+   "fp": 6,
+   "tn": 1994,
+   "tpr": null,
+   "fpr": 0.003,
+   "acc": 0.997
+  },
+  "wild_jailbreak": {
+   "n": 790,
+   "tp": 535,
+   "fn": 255,
+   "fp": 0,
+   "tn": 0,
+   "tpr": 0.6772151898734177,
+   "fpr": null,
+   "acc": 0.6772151898734177
+  },
+  "wild_regular_benign": {
+   "n": 2000,
+   "tp": 0,
+   "fn": 0,
+   "fp": 219,
+   "tn": 1781,
+   "tpr": null,
+   "fpr": 0.1095,
+   "acc": 0.8905
+  },
+  "MACRO": {
+   "tpr": 0.4058575949367088,
+   "fpr": 0.038
+  }
+ },
+ "base_at_matched_fp": {
+  "ALL": {
+   "n": 8790,
+   "tp": 832,
+   "fn": 1958,
+   "fp": 228,
+   "tn": 5772,
+   "tpr": 0.2982078853046595,
+   "fpr": 0.038,
+   "acc": 0.7513083048919227,
+   "bal_acc": 0.6301039426523297,
+   "auroc": 0.6301039426523297
+  },
+  "dolly_benign": {
+   "n": 2000,
+   "tp": 0,
+   "fn": 0,
+   "fp": 4,
+   "tn": 1996,
+   "tpr": null,
+   "fpr": 0.002,
+   "acc": 0.998
+  },
+  "llmail_inj": {
+   "n": 2000,
+   "tp": 306,
+   "fn": 1694,
+   "fp": 0,
+   "tn": 0,
+   "tpr": 0.153,
+   "fpr": null,
+   "acc": 0.153
+  },
+  "oasst_benign": {
+   "n": 2000,
+   "tp": 0,
+   "fn": 0,
+   "fp": 8,
+   "tn": 1992,
+   "tpr": null,
+   "fpr": 0.004,
+   "acc": 0.996
+  },
+  "wild_jailbreak": {
+   "n": 790,
+   "tp": 526,
+   "fn": 264,
+   "fp": 0,
+   "tn": 0,
+   "tpr": 0.6658227848101266,
+   "fpr": null,
+   "acc": 0.6658227848101266
+  },
+  "wild_regular_benign": {
+   "n": 2000,
+   "tp": 0,
+   "fn": 0,
+   "fp": 216,
+   "tn": 1784,
+   "tpr": null,
+   "fpr": 0.108,
+   "acc": 0.892
+  },
+  "MACRO": {
+   "tpr": 0.4094113924050633,
+   "fpr": 0.038
+  }
+ },
+ "matched_thr": 0.7563719749450684
+}

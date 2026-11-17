@@ -1,0 +1,8 @@
+# publish only the write-up, code and numeric results
+/*
+!/.gitignore
+!/.nojekyll
+!/index.html
+!/README.md
+!/wsp_*.py
+!/results/

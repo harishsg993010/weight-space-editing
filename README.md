@@ -1,0 +1,19 @@
+# Weight-space editing a prompt-injection classifier
+
+Gradient-free weight edits to `protectai/deberta-v3-base-prompt-injection-v2`, following the idea in
+[Weight-Space Programming](https://rikiyat.github.io/blog/weight-space-programming/).
+
+**Write-up:** https://harishsg993010.github.io/weight-space-editing/
+
+| File | What it does |
+|---|---|
+| `wsp_app.py` | Data prep, baseline, per-layer diagnosis, edits v1–v3 |
+| `wsp_path.py` | The edit itself: wire coordinate, gated units, exact readout |
+| `wsp_lib.py` | Scoring, metrics, closed-form directions |
+| `wsp_eval2.py` | Human-written out-of-distribution eval |
+| `wsp_v4.py` | Broad design pool, leave-one-source-out selection, v4/v5 |
+| `wsp_probe.py` | Search for a signal that transfers across sources |
+| `wsp_v6.py` | Token-max attention-head circuit |
+| `results/` | Numeric results for every stage (no dataset text) |
+
+Everything runs on [Modal](https://modal.com); see the write-up for the commands. Model weights are not included.
