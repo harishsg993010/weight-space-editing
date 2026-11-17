@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Weight-space editing a prompt-injection classifier</title>
-<meta name="description" content="Gradient-free weight edits to a DeBERTa prompt-injection detector: what worked, what did not, and how far it generalises.">
+<title>Editing a prompt-injection detector by hand</title>
+<meta name="description" content="I tried to fix a prompt-injection classifier by writing a few thousand weights by hand, with no training. What worked, what didn't, and where I fooled myself.">
 <style>
 :root{--bg:#fbfaf7;--fg:#1d1c1a;--muted:#6a675f;--line:#dedad0;--card:#f3f0e8;--accent:#9a3d1f;--good:#1f6b3a;--bad:#a02a2a;--code:#efece3}
 @media (prefers-color-scheme:dark){:root{--bg:#161614;--fg:#e9e6dd;--muted:#a09c91;--line:#34322d;--card:#1f1e1b;--accent:#e08a66;--good:#6fc48a;--bad:#ef8a8a;--code:#23221f}}
@@ -14,15 +14,13 @@ main{max-width:780px;margin:0 auto;padding:56px 20px 96px}
 h1{font-size:2.05rem;line-height:1.2;margin:0 0 .5rem;letter-spacing:-.01em}
 h2{font-size:1.4rem;margin:3rem 0 .8rem;padding-top:1.2rem;border-top:1px solid var(--line)}
 h3{font-size:1.08rem;margin:2rem 0 .5rem}
-p,li{margin:.6rem 0}
+p,li{margin:.7rem 0}
 .sub{color:var(--muted);font-size:1.05rem;margin:0 0 1.6rem}
 .meta{color:var(--muted);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;margin-bottom:2rem}
 a{color:var(--accent)}
 code{font:.86em/1.4 ui-monospace,Consolas,Menlo,monospace;background:var(--code);padding:.1em .35em;border-radius:4px}
 pre{background:var(--code);padding:14px 16px;border-radius:8px;overflow-x:auto;font:13.5px/1.5 ui-monospace,Consolas,Menlo,monospace}
 pre code{background:none;padding:0;font-size:inherit}
-.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:1.4rem 0}
-.box p:first-child{margin-top:0}.box p:last-child,.box ul:last-child{margin-bottom:0}
 .tw{overflow-x:auto;margin:1.1rem 0}
 table{border-collapse:collapse;width:100%;font:14.5px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
 th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
@@ -30,7 +28,7 @@ th:first-child,td:first-child{text-align:left;white-space:normal}
 th{font-weight:600;color:var(--muted);border-bottom:2px solid var(--line)}
 .g{color:var(--good);font-weight:600}.b{color:var(--bad);font-weight:600}
 .cap{color:var(--muted);font:13.5px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;margin-top:.3rem}
-.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:1.2rem 0;font:13.5px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch;margin:1.2rem 0;font:13.5px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
 .flow div{flex:1 1 150px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
 .flow b{display:block;margin-bottom:3px}
 footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;border-top:1px solid var(--line);padding-top:1rem}
@@ -39,143 +37,139 @@ footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-syste
 <body>
 <main>
 
-<h1>Weight-space editing a prompt-injection classifier</h1>
-<p class="sub">Can a detector be improved by reading its internals and writing a few thousand weights by hand, with no gradient training? Partly. This is the full record, including what failed.</p>
-<p class="meta">November 2026 · <a href="https://github.com/harishsg993010/weight-space-editing">code and results</a> · experiments run with Claude Code on Modal</p>
+<h1>I tried to fix a prompt-injection detector by editing its weights by hand</h1>
+<p class="sub">No fine-tuning, no gradients. Just reading the network, working out what's broken, and writing a few thousand numbers into it. It sort of worked. Here's the whole story, including the parts where I fooled myself.</p>
+<p class="meta">November 2026 · <a href="https://github.com/harishsg993010/weight-space-editing">code and results on GitHub</a> · built with Claude Code, run on Modal</p>
 
-<div class="box">
-<p><b>Summary</b></p>
-<ul>
-<li>Target: <a href="https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2"><code>protectai/deberta-v3-base-prompt-injection-v2</code></a> (184M parameters). Method follows the idea in <a href="https://rikiyat.github.io/blog/weight-space-programming/">Weight-Space Programming</a>: diagnose the network, then write weights directly.</li>
-<li>Diagnosis: mid-network, the model separates benign prompts that merely contain trigger words from real injections. The last feed-forward block destroys most of that signal before the classifier reads it.</li>
-<li>The final edit (<b>v5</b>) changes 15,363 weights (0.008%), all in the last layer and the head, set in closed form.</li>
-<li>On new examples from the kinds of sources used in design: attacks caught <b>64.3% → 88.2%</b>, false positives <b>2.3% → 1.8%</b>.</li>
-<li>On sources never used in design: attacks caught 66.3% → 67.1%, false positives 1.8% → 1.6%. Both move the right way, but the margin is thin.</li>
-<li>Earlier versions looked much better than they were. Two of them were worse than simply moving the baseline's threshold once tested on fresh human-written data.</li>
-</ul>
-</div>
+<p>A while back I read Rikiya Takehi's post on <a href="https://rikiyat.github.io/blog/weight-space-programming/">weight-space programming</a>. The pitch is that a network's weights are a program, and you can read and edit that program directly instead of leaving everything to an optimizer. In one of his experiments a small Qwen model stops looping after a single direction is removed from two layers.</p>
+<p>I wanted to know if the same idea works on something I actually care about, which is a prompt-injection classifier. These models have a well-known annoying habit. Say "please ignore the typo above" and they scream INJECTION. So the goal was easy to state: fewer false alarms, more real attacks caught, and no training.</p>
+<p>The short version is that I got a big improvement on the kind of data I designed the edit on, and a small one on data it had never seen. Along the way I built two versions that looked great and were, on closer inspection, worse than just moving the threshold.</p>
 
-<h2>Setup</h2>
-<p>The classifier labels a prompt <code>SAFE</code> or <code>INJECTION</code>. All numbers use the model's default threshold of 0.5 unless stated. "TPR" is the share of attacks caught; "FPR" is the share of benign prompts wrongly flagged.</p>
-<p>Edits were restricted to what the blog post's experiments allow: forward passes for diagnosis, then weights written from closed-form statistics (means, covariances, quantiles). No gradient steps, no training loop.</p>
-<p>Data came from public Hugging Face datasets. Each stage kept a split that the edit never saw, and the last stage also kept whole <em>sources</em> unseen.</p>
+<h2>The model and the rules</h2>
+<p>The target is <a href="https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2"><code>protectai/deberta-v3-base-prompt-injection-v2</code></a>, a 184M-parameter DeBERTa that outputs SAFE or INJECTION. I kept its default 0.5 threshold everywhere.</p>
+<p>The rules I set for myself were simple. Forward passes are fine for poking around, but every weight I change has to come from something closed-form, like a mean, a covariance or a quantile. No gradient steps anywhere.</p>
+<p>Two terms I'll use a lot. TPR is the share of attacks the model catches. FPR is the share of harmless prompts it wrongly flags.</p>
 
-<h2>Baseline</h2>
+<h2>Where it started</h2>
 <div class="tw"><table>
-<tr><th>Dataset (held-out half)</th><th>n</th><th>TPR</th><th>FPR</th></tr>
+<tr><th>Dataset (the half I held out)</th><th>n</th><th>TPR</th><th>FPR</th></tr>
 <tr><td>safe-guard-prompt-injection</td><td>5,065</td><td>84.3</td><td>0.1</td></tr>
 <tr><td>deepset/prompt-injections</td><td>330</td><td>41.2</td><td>1.5</td></tr>
 <tr><td>jailbreak-classification</td><td>385</td><td>88.1</td><td>0.3</td></tr>
 <tr><td>Gandalf ignore-instructions</td><td>500</td><td>100.0</td><td>n/a</td></tr>
-<tr><td>NotInject (benign text with trigger words)</td><td>169</td><td>n/a</td><td>46.2</td></tr>
+<tr><td>NotInject (harmless text with scary words)</td><td>169</td><td>n/a</td><td>46.2</td></tr>
 <tr><td><b>All</b></td><td>6,449</td><td>85.4</td><td>2.0</td></tr>
 </table></div>
-<p>Two weaknesses stand out: nearly half of benign prompts containing words like "ignore" or "bypass" are flagged, and many attacks in deepset are missed.</p>
+<p>That 46% is the habit I mentioned. NotInject is a set of perfectly innocent prompts that happen to contain words like "ignore" or "bypass", and the model flags almost half of them. It also misses most of the attacks in deepset.</p>
 
-<h2>Diagnosis</h2>
-<p>For every layer I took the CLS token's state and asked how well a single direction separates wrongly flagged benign prompts from correctly flagged attacks (AUROC, fitted on one half of the dev split and scored on the other).</p>
+<h2>What's actually going wrong inside</h2>
+<p>Before changing anything I wanted to know whether the model is genuinely confused by these prompts, or whether it knows better and just doesn't say so. So at every layer I took the CLS token and asked whether one direction can tell a wrongly flagged harmless prompt apart from a real attack.</p>
 <div class="tw"><table>
-<tr><th>Where the direction is read</th><th>Difference of means</th><th>Whitened</th></tr>
-<tr><td>Layer 5</td><td>0.93</td><td>0.90</td></tr>
-<tr><td>Layer 7</td><td>0.95</td><td>0.985</td></tr>
-<tr><td>Layer 8</td><td>0.89</td><td>0.989</td></tr>
-<tr><td>Layer 11</td><td>0.79</td><td>0.97</td></tr>
-<tr><td>Layer 12 (what the head sees)</td><td>0.78</td><td>0.91</td></tr>
+<tr><th>Layer</th><th>Plain difference of means</th><th>Whitened</th></tr>
+<tr><td>5</td><td>0.93</td><td>0.90</td></tr>
+<tr><td>7</td><td>0.95</td><td>0.985</td></tr>
+<tr><td>8</td><td>0.89</td><td>0.989</td></tr>
+<tr><td>11</td><td>0.79</td><td>0.97</td></tr>
+<tr><td>12, which is all the classifier sees</td><td>0.78</td><td>0.91</td></tr>
 </table></div>
-<p>The model knows the difference mid-stack and loses it by the end. A follow-up test located the loss: units reading the CLS state just <em>before</em> the last feed-forward block cut the trigger-word false-positive rate to about 15% in cross-validation, against 30% for units reading just after it.</p>
+<p class="cap">AUROC, fitted on one half of my dev data and scored on the other.</p>
+<p>So it knows. Around layers 7 and 8 the two groups are almost perfectly separable, and then the distinction fades before the classifier gets to use it. I narrowed it down further, and the culprit turned out to be the very last feed-forward block. Reading the CLS state right before that block gave me about 15% false positives on the scary-word prompts. Reading right after it gave 30%.</p>
+<p>This was the fun part of the project. It's a specific, checkable claim about one block of one layer, and it tells you exactly where to operate.</p>
 
 <h2>The edit</h2>
-<p>Only the CLS output of the last layer is ever used, so the last layer can be reprogrammed without side effects on other tokens.</p>
+<p>There's a nice property to exploit here. The classifier only ever looks at the CLS token of the last layer, so I can rewire the last layer however I like and no other token will notice.</p>
 <div class="flow">
-<div><b>1. Free a wire</b>One residual coordinate (66) is cleared: nothing else writes to it, and a +/− unit pair cancels what it already carries.</div>
-<div><b>2. Gated units</b>Four feed-forward units read the pre-destruction CLS state. Two fire on missed attacks, two on wrongly flagged benign text.</div>
-<div><b>3. Exact readout</b>A +/− pair in the pooler reads the wire linearly (<code>gelu(z) − gelu(−z) = z</code>) into the logit.</div>
-<div><b>4. Bias</b>The classifier bias moves 3.79 logits toward SAFE, spending part of the gain on fewer false positives.</div>
+<div><b>Free up a wire</b>I pick one coordinate of the residual stream (number 66) and clear it out, so nothing else writes there.</div>
+<div><b>Add four detectors</b>Four feed-forward units read the CLS state from before the damage. Two fire on attacks the model is missing, two on harmless text it's flagging.</div>
+<div><b>Read the wire</b>Two pooler units read that coordinate into the final logit. Since <code>gelu(z) − gelu(−z) = z</code>, a plus/minus pair gives an exactly linear readout.</div>
+<div><b>Nudge the bias</b>I shift the classifier bias toward SAFE, trading some of the gain for fewer false alarms.</div>
 </div>
-<p>Each gated unit is <code>gelu(s·(v·h − t))</code>. The direction <code>v</code> is a shrunk, whitened difference of means between the examples it should fire on and those it must leave alone; the threshold <code>t</code> is a high quantile of the protected group, so the unit stays off for them. Units are added greedily, each one designed against the errors that remain. With no units firing, installing the wire moves any logit by at most 0.07.</p>
+<p>Each detector is <code>gelu(s·(v·h − t))</code>. The direction <code>v</code> separates the examples it should fire on from the ones it should leave alone. The threshold <code>t</code> sits at a high quantile of that second group, so the unit stays quiet for them. I add units one at a time, each aimed at whatever errors are left.</p>
+<p>All told that's 15,363 weights out of 184 million, about 0.008%. With no detector firing, the rewiring moves any logit by at most 0.07, so the model is otherwise untouched.</p>
 
-<h2>Results by version</h2>
-<p>Each version was a response to a failure of the one before it.</p>
+<h2>How it went, version by version</h2>
 
-<h3>v1 and v2: strong on the test split, worse than a threshold shift on new data</h3>
-<p>Designed on five datasets. On their held-out halves the edit looked excellent:</p>
+<h3>v1 and v2: I thought I was done</h3>
+<p>I designed the first edit on five datasets and tested on the halves I'd held back.</p>
 <div class="tw"><table>
-<tr><th>Held-out halves of the five design datasets</th><th>Baseline</th><th>v2</th></tr>
-<tr><td>Attacks caught (of 2,233)</td><td>1,907</td><td class="g">2,108</td></tr>
-<tr><td>False positives (of 4,216)</td><td>85</td><td class="g">42</td></tr>
+<tr><th>Held-out halves of those five datasets</th><th>Before</th><th>After (v2)</th></tr>
+<tr><td>Attacks caught, of 2,233</td><td>1,907</td><td class="g">2,108</td></tr>
+<tr><td>False positives, of 4,216</td><td>85</td><td class="g">42</td></tr>
 </table></div>
-<p>Then I scored it on human-written data from other sources (in-the-wild jailbreaks, LLMail-Inject attack emails, OpenAssistant and Dolly prompts):</p>
+<p>Half the false positives gone and 200 more attacks caught. I was pretty pleased with myself.</p>
+<p>Then I tried it on prompts written by actual people, from places I hadn't touched: jailbreaks collected from Reddit and Discord, attack emails from Microsoft's LLMail-Inject challenge, and ordinary questions from OpenAssistant and Dolly.</p>
 <div class="tw"><table>
-<tr><th>Human-written, unseen sources (8,790 prompts)</th><th>TPR</th><th>FPR</th></tr>
-<tr><td>Baseline</td><td>31.0</td><td>4.0</td></tr>
+<tr><th>8,790 human-written prompts from new sources</th><th>TPR</th><th>FPR</th></tr>
+<tr><td>Original model</td><td>31.0</td><td>4.0</td></tr>
 <tr><td>v2</td><td>40.3</td><td class="b">6.6</td></tr>
-<tr><td>Baseline, threshold moved to the same FPR</td><td class="g">46.1</td><td>6.6</td></tr>
+<tr><td>Original model with the threshold lowered to match</td><td class="g">46.1</td><td>6.6</td></tr>
 </table></div>
-<p>The edit raised false positives on ordinary prompts ("What's the best book on gravitation?") and was beaten by a plain threshold change. v1 had also raised false positives on benign role-play prompts from 1.1% to 8.9%, which v2 fixed.</p>
+<p>Ouch. My clever edit lost to turning one knob. It was now flagging things like "What's the best book on gravitation?" The detectors I'd built for missed attacks had learned what attacks look like in my five datasets, and not much else.</p>
+<p>v1 had an extra problem on top of that. It flagged 8.9% of harmless "act as a…" prompts, up from 1.1%. v2 fixed that one, at least.</p>
 
-<h3>v3: false-positive units only</h3>
-<p>With only the two suppressing units, the edit cannot create false positives. On the five-dataset test split, false positives fell from 85 to 25 and NotInject FPR from 46.2% to 13.0%, losing 6 of 1,907 detections. On the human-written set it was neutral: 13 fewer false positives, 60 fewer attacks caught.</p>
+<h3>v3: only the false-alarm detectors</h3>
+<p>Next I kept just the two units that push toward SAFE. An edit like that can't create new false alarms, which felt like a safer bet. On the original five datasets, false positives dropped from 85 to 25 and the scary-word rate went from 46.2% to 13.0%, for the price of six missed attacks out of 1,907.</p>
+<p>On the human-written set it was a wash: 13 fewer false alarms, 60 fewer attacks caught. Useful if scary-word false alarms are your one problem. Not what I was after.</p>
 
-<h3>v4 and v5: broader design pool</h3>
-<p>The design pool grew to 13 sources, adding in-the-wild jailbreaks, attack emails, benign emails and real user prompts. Seven further sources were reserved and never used.</p>
+<h3>v4 and v5: a wider diet</h3>
+<p>The obvious fix was to design on more varied data. I grew the pool to 13 sources, adding the Reddit jailbreaks, the attack emails, real benign emails and real user prompts. I also set aside seven sources that the edit would never get to see, because by now I didn't trust any number that came from data I'd been staring at.</p>
 <div class="tw"><table>
-<tr><th></th><th>Baseline</th><th>v5</th></tr>
-<tr><td colspan="3"><b>Held-out halves of the design sources (14,755)</b></td></tr>
-<tr><td>Attacks caught (of 3,626)</td><td>2,333 (64.3%)</td><td class="g">3,198 (88.2%)</td></tr>
-<tr><td>False positives (of 11,129)</td><td>253 (2.3%)</td><td class="g">202 (1.8%)</td></tr>
-<tr><td colspan="3"><b>Never-seen sources (9,119)</b></td></tr>
-<tr><td>Attacks caught (of 4,120)</td><td>2,731 (66.3%)</td><td class="g">2,763 (67.1%)</td></tr>
-<tr><td>False positives (of 4,999)</td><td>90 (1.8%)</td><td class="g">78 (1.6%)</td></tr>
+<tr><th></th><th>Before</th><th>After (v5)</th></tr>
+<tr><td colspan="3"><b>New examples from the 13 design sources (14,755)</b></td></tr>
+<tr><td>Attacks caught, of 3,626</td><td>2,333 (64.3%)</td><td class="g">3,198 (88.2%)</td></tr>
+<tr><td>False positives, of 11,129</td><td>253 (2.3%)</td><td class="g">202 (1.8%)</td></tr>
+<tr><td colspan="3"><b>The seven sources it never saw (9,119)</b></td></tr>
+<tr><td>Attacks caught, of 4,120</td><td>2,731 (66.3%)</td><td class="g">2,763 (67.1%)</td></tr>
+<tr><td>False positives, of 4,999</td><td>90 (1.8%)</td><td class="g">78 (1.6%)</td></tr>
 </table></div>
-
+<p>This is the result I'd stand behind. Both numbers go the right way on both sets. But look at the size of the second one: 32 more attacks and 12 fewer false alarms out of nine thousand prompts. Real, and small.</p>
 <div class="tw"><table>
-<tr><th>Never-seen source</th><th>n</th><th>Baseline</th><th>v5</th></tr>
-<tr><td>LLMail-Inject phase 2 (attacks caught)</td><td>2,000</td><td>715</td><td>749</td></tr>
-<tr><td>Multilingual injections (attacks caught)</td><td>974</td><td>956</td><td>956</td></tr>
-<tr><td>Tensor Trust (attacks caught)</td><td>922</td><td>902</td><td>900</td></tr>
-<tr><td>ToxicChat jailbreaks, human-labelled (caught)</td><td>182</td><td>122</td><td>123</td></tr>
-<tr><td>Jailbreak prompt list (caught)</td><td>42</td><td>36</td><td>35</td></tr>
-<tr><td>ToxicChat benign user traffic (false positives)</td><td>3,000</td><td>86</td><td>74</td></tr>
-<tr><td>UltraChat benign (false positives)</td><td>1,999</td><td>4</td><td>4</td></tr>
+<tr><th>Never-seen source</th><th>n</th><th>Before</th><th>After</th></tr>
+<tr><td>LLMail-Inject phase 2, attacks caught</td><td>2,000</td><td>715</td><td>749</td></tr>
+<tr><td>Multilingual injections, attacks caught</td><td>974</td><td>956</td><td>956</td></tr>
+<tr><td>Tensor Trust, attacks caught</td><td>922</td><td>902</td><td>900</td></tr>
+<tr><td>ToxicChat jailbreaks (human-labelled), caught</td><td>182</td><td>122</td><td>123</td></tr>
+<tr><td>A list of known jailbreaks, caught</td><td>42</td><td>36</td><td>35</td></tr>
+<tr><td>ToxicChat ordinary user traffic, false positives</td><td>3,000</td><td>86</td><td>74</td></tr>
+<tr><td>UltraChat, false positives</td><td>1,999</td><td>4</td><td>4</td></tr>
 </table></div>
-<p class="cap">On the held-out halves, most of the gain is LLMail attack emails (15.8% → 92.9% caught) and safe-guard (84.3% → 91.2%); in-the-wild jailbreaks slip from 68.4% to 65.8%.</p>
+<p>On the familiar sources, most of the jump comes from the attack emails (15.8% caught to 92.9%) and safe-guard (84.3% to 91.2%). Not everything improved. The Reddit jailbreaks actually slipped a little, from 68.4% to 65.8%.</p>
 
-<h2>Looking for a signal that transfers</h2>
-<p>To check whether the edits were simply reading the wrong place, I scored linear readouts by leave-one-source-out: fit on three groups of sources, test on the fourth. The measure is attacks caught out of 3,629 at the baseline's own false-positive count.</p>
+<h2>Was I just reading the wrong place?</h2>
+<p>At this point I'd concluded the approach was near its limit. I got pushed on that, and fairly. Every edit so far had read one spot, the CLS token going into the last block. Maybe a better signal was sitting somewhere else.</p>
+<p>So I ran a stricter test. Split the 13 sources into four groups, fit a readout on three, score it on the fourth. The question is how many of the 3,629 attacks you catch while making no more false alarms than the original model.</p>
 <div class="tw"><table>
-<tr><th>What is read, added to the model's own score</th><th>Attacks caught</th><th>Writable into weights?</th></tr>
-<tr><td>Baseline model</td><td>2,337</td><td>n/a</td></tr>
-<tr><td>Any single layer's CLS or pooled state alone</td><td>≤ 2,323</td><td>n/a</td></tr>
-<tr><td>Per-feature max over tokens, layer 10</td><td>2,512–2,635</td><td>No: one head per feature</td></tr>
-<tr><td>Max over tokens of one direction, layer 10</td><td>2,419–2,434</td><td>Yes: one head</td></tr>
-<tr><td>Max over tokens of one direction, layer 11</td><td>≤ 2,333</td><td>Yes, no gain</td></tr>
-<tr><td>Thresholded token units, averaged over tokens</td><td>≤ 2,307</td><td>Yes, no gain</td></tr>
+<tr><th>What gets read and added to the model's own score</th><th>Attacks caught</th><th>Can it be written into weights?</th></tr>
+<tr><td>Nothing (the original model)</td><td>2,337</td><td></td></tr>
+<tr><td>Any one layer's CLS or averaged state, by itself</td><td>2,323 at best</td><td></td></tr>
+<tr><td>Per-feature max over all tokens, layer 10</td><td>2,512 to 2,635</td><td>Not really, it needs a head per feature</td></tr>
+<tr><td>Max over tokens along one direction, layer 10</td><td>2,419 to 2,434</td><td>Yes, with one attention head</td></tr>
+<tr><td>Same thing at layer 11</td><td>2,333 at best</td><td>Yes, but there's nothing there</td></tr>
+<tr><td>Token-level detectors, averaged over tokens</td><td>2,307 at best</td><td>Yes, but no gain</td></tr>
 </table></div>
-<p>There is a transferable signal of the form "some token strongly shows feature X", but it is spread over many features and needs a true max over tokens. Unwhitened difference-of-means directions also transferred far better than whitened ones, which is a mark against the directions used in the units above.</p>
+<p>So I was wrong about the limit, at least partly. There is a signal that carries over to new sources, and it has an intuitive shape: does any single token light up strongly for some feature. The catch is that it's smeared across hundreds of features and needs a true max over tokens. Average instead of max and it disappears.</p>
+<p>One more thing fell out of this that I wish I'd known earlier. Plain difference-of-means directions carried over to new sources far better than the whitened ones I'd been using in my detectors.</p>
 
-<h3>v6: building the one-head version</h3>
-<p>I reprogrammed one attention head in layer 11 to attend to the token with the largest projection, write that value to a second freed coordinate, and carry it to a linear reader in the last layer. The circuit works mechanically: the carried value correlates 0.85 with the intended max, and installing it flips 10 of 38,648 predictions. It adds almost nothing to detection: about 28 attacks over a threshold shift on its own, and slightly negative on top of the four units. v6 is not better than v5 and touches 234,357 weights.</p>
+<h3>v6: building the one-head version anyway</h3>
+<p>The version a single attention head can compute was only worth about a third of the full signal, but I built it to see. One head in layer 11 now attends to whichever token projects most strongly onto my direction, writes that value onto a second cleared coordinate, and a reader in the last layer picks it up.</p>
+<p>Mechanically it's lovely. The value that arrives correlates 0.85 with the true max, and installing the whole thing flips 10 predictions out of 38,648. And it does almost nothing for detection. It's worth about 28 extra attacks by itself, and it's slightly negative on top of the four detectors. It also touches 234,357 weights instead of 15,000. v5 stays the one I'd use.</p>
 
-<h2>Limitations</h2>
-<ul>
-<li><b>The never-seen margin is small.</b> +32 attacks and −12 false positives out of 9,119. Of five bias settings tried, the reported one was the only one that improved both, and it was chosen with those results visible.</li>
-<li><b>Leave-one-source-out was pessimistic.</b> When a whole source is withheld from design, no setting of the four-unit edit beat the baseline on both metrics. The edit generalises to new examples from familiar sources much better than to new sources.</li>
-<li><b>Ranking quality on never-seen sources dips</b> (AUROC 97.3 → 96.8). The gain is at the 0.5 operating point.</li>
-<li><b>Repeated looks.</b> The five-dataset test split and the first human-written set were each consulted across several iterations and should be read as development data.</li>
-<li><b>Label noise.</b> deepset labels some plain role-play requests as attacks. The "regular" in-the-wild prompts contain real jailbreaks. One synthetic dataset (<code>jayavibhav/prompt-injection</code>) was dropped after inspection because its two classes were hard to tell apart by eye; the baseline flagged 82% of its "benign" rows.</li>
-<li><b>Truncation.</b> Inputs are cut at 512 tokens, so attacks late in long emails may be missed by any version.</li>
-<li><b>Not tried:</b> gradient fine-tuning on the same pool, which is the obvious comparison.</li>
-</ul>
+<h2>What I'd be careful about</h2>
+<p>The improvement on never-seen sources is thin. I tried five bias settings, and the one I'm reporting was the only one that improved both numbers there. I picked it with those results in front of me. Treat it as "probably slightly better", not as a headline.</p>
+<p>The strict group-out test was more pessimistic than the final numbers. When a whole source is hidden during design, no setting of the four-detector edit beat the original model on both counts. The edit handles new examples from familiar places much better than it handles new places.</p>
+<p>Ranking quality on the never-seen sources dipped a little (AUROC 97.3 to 96.8). The gain is at the 0.5 threshold, not everywhere.</p>
+<p>I looked at the five-dataset test split and the first human-written set many times while iterating. They're development data at this point, whatever I called them at the start.</p>
+<p>Some labels are shaky. deepset marks plain role-play requests as attacks. The "regular" Reddit prompts include obvious jailbreaks. And I threw out one synthetic dataset entirely after reading it. The original model flagged 82% of its "benign" rows, which looked insane until I saw that its benign and attack rows were basically indistinguishable.</p>
+<p>Inputs are cut at 512 tokens, so an attack buried late in a long email is invisible to every version here.</p>
+<p>And the big one. I never ran ordinary fine-tuning on the same data. That's the comparison that would tell you whether any of this is worth the trouble.</p>
 
-<h2>Takeaways</h2>
-<ul>
-<li>Reading the network before editing paid off: the finding that the last feed-forward block discards a useful distinction was specific and exploitable.</li>
-<li>A handful of hand-written units can produce large gains on the distribution they were designed on. Those gains say little about new sources.</li>
-<li>Always compare against the baseline at a matched false-positive count. Two versions here improved the headline rate while being worse than a threshold change.</li>
-<li>Evaluate on whole sources that design never touched, and look at the rows: one dataset with an 82% "false-positive rate" turned out to be a labelling problem.</li>
-</ul>
+<h2>What I took away</h2>
+<p>Reading the network first was worth it. "The last block throws away a distinction the model already made" is a concrete finding, and it pointed straight at the fix.</p>
+<p>A handful of hand-written units can move the numbers a lot on the data you built them from. That tells you very little about anywhere else.</p>
+<p>Compare against the original model at the same false-positive count, every time. Twice I had a better headline number and a worse model.</p>
+<p>Hold out whole sources, and read the rows. The 82% dataset would have wrecked my conclusions if I'd only looked at the table.</p>
 
-<h2>Reproduce</h2>
+<h2>Run it yourself</h2>
 <pre><code>pip install modal &amp;&amp; modal setup
 modal run wsp_app.py --stage prep        # model + five datasets
 modal run wsp_app.py --stage baseline
@@ -183,20 +177,17 @@ modal run wsp_app.py --stage diagnose    # per-layer probes
 modal run wsp_app.py --stage oracle      # where the signal is lost
 modal run wsp_eval2.py --version v3      # human-written eval set
 modal run wsp_v4.py --stage prep         # 13 design sources + 7 never-seen
-modal run wsp_v4.py --stage select       # leave-one-source-out
+modal run wsp_v4.py --stage select       # group-out test
 modal run wsp_v4.py --stage final --cfg '{"lam":0.3,"fn_q":0.99,"fp_q":0.995,"fn_delta":16,"fp_delta":16,"rounds":2,"order":["fn","fp"]}'
 modal run wsp_v4.py --stage bake --cfg 3.79   # v5
-modal run wsp_probe.py --stage combo     # transferable-signal search
-modal run wsp_v6.py                      # token-max circuit</code></pre>
-<p>The edit itself is in <code>wsp_path.py</code> (about 120 lines). Numeric results for every stage are in the <code>results/</code> folder of the repository. Model weights are not published; the commands above rebuild them.</p>
+modal run wsp_probe.py --stage combo     # the search for a signal that carries over
+modal run wsp_v6.py                      # the attention-head circuit</code></pre>
+<p>The edit lives in <code>wsp_path.py</code> and is about 120 lines. The numbers behind every table are in the <code>results/</code> folder. I haven't uploaded the edited weights, but the commands above rebuild them.</p>
 
-<h2>Sources</h2>
-<ul>
-<li>Method idea: <a href="https://rikiyat.github.io/blog/weight-space-programming/">Weight-Space Programming</a>, Rikiya Takehi.</li>
-<li>Model: <a href="https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2">protectai/deberta-v3-base-prompt-injection-v2</a>.</li>
-<li>Design and held-out data: deepset/prompt-injections, xTRam1/safe-guard-prompt-injection, leolee99/NotInject, jackhhao/jailbreak-classification, Lakera/gandalf_ignore_instructions, TrustAIRLab/in-the-wild-jailbreak-prompts, microsoft/llmail-inject-challenge (phase 1), OpenAssistant/oasst1, databricks/databricks-dolly-15k, fka/awesome-chatgpt-prompts, tatsu-lab/alpaca, SetFit/enron_spam (ham only).</li>
-<li>Never-seen data: lmsys/toxic-chat, qxcv/tensor-trust, microsoft/llmail-inject-challenge (phase 2), yanismiraoui/prompt_injections, rubend18/ChatGPT-Jailbreak-Prompts, HuggingFaceH4/ultrachat_200k.</li>
-</ul>
+<h2>Credits and data</h2>
+<p>The idea comes from <a href="https://rikiyat.github.io/blog/weight-space-programming/">Weight-Space Programming</a> by Rikiya Takehi. The model is ProtectAI's <a href="https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2">deberta-v3-base-prompt-injection-v2</a>.</p>
+<p>Used for design and held-out halves: deepset/prompt-injections, xTRam1/safe-guard-prompt-injection, leolee99/NotInject, jackhhao/jailbreak-classification, Lakera/gandalf_ignore_instructions, TrustAIRLab/in-the-wild-jailbreak-prompts, microsoft/llmail-inject-challenge (phase 1), OpenAssistant/oasst1, databricks/databricks-dolly-15k, fka/awesome-chatgpt-prompts, tatsu-lab/alpaca, and the non-spam half of SetFit/enron_spam.</p>
+<p>Never used in design: lmsys/toxic-chat, qxcv/tensor-trust, microsoft/llmail-inject-challenge (phase 2), yanismiraoui/prompt_injections, rubend18/ChatGPT-Jailbreak-Prompts, HuggingFaceH4/ultrachat_200k.</p>
 
 <footer>Code: <a href="https://github.com/harishsg993010/weight-space-editing">github.com/harishsg993010/weight-space-editing</a></footer>
 </main>
