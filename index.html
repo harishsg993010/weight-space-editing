@@ -202,7 +202,7 @@ modal run wsp_v4.py --stage final --cfg '{"lam":0.3,"fn_q":0.99,"fp_q":0.995,"fn
 modal run wsp_v4.py --stage bake --cfg 3.79   # version 5
 modal run wsp_probe.py --stage combo     # search for a better signal
 modal run wsp_v6.py                      # version 6</code></pre>
-<p>The code which changes the weights is in <code>wsp_path.py</code>. It is about 120 lines. The numbers behind every table are in the <code>results</code> folder. I have not uploaded the changed model, but the above commands will build it again.</p>
+<p>The code which changes the weights is in <code>wsp_path.py</code>. It is about 120 lines. The numbers behind every table are in the <code>results</code> folder. The changed model (version 5) is on Hugging Face: <a href="https://huggingface.co/rootxhacker/deberta-v3-base-prompt-injection-v2-weight-edited">rootxhacker/deberta-v3-base-prompt-injection-v2-weight-edited</a>.</p>
 
 <h2>Credits and data</h2>
 <p>The idea is from <a href="https://rikiyat.github.io/blog/weight-space-programming/">Weight-Space Programming</a> by Rikiya Takehi. The model is <a href="https://huggingface.co/protectai/deberta-v3-base-prompt-injection-v2">deberta-v3-base-prompt-injection-v2</a> from ProtectAI.</p>

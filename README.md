@@ -14,6 +14,7 @@ Gradient-free weight edits to `protectai/deberta-v3-base-prompt-injection-v2`, f
 | `wsp_v4.py` | Broad design pool, leave-one-source-out selection, v4/v5 |
 | `wsp_probe.py` | Search for a signal that transfers across sources |
 | `wsp_v6.py` | Token-max attention-head circuit |
+| `wsp_upload.py` | Uploads the edited model to Hugging Face |
 | `results/` | Numeric results for every stage (no dataset text) |
 
-Everything runs on [Modal](https://modal.com); see the write-up for the commands. Model weights are not included.
+Everything runs on [Modal](https://modal.com); see the write-up for the commands. The edited model (version 5) is on Hugging Face: https://huggingface.co/rootxhacker/deberta-v3-base-prompt-injection-v2-weight-edited
