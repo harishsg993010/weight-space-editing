@@ -52,14 +52,15 @@ footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-syste
 
 <h2>Where it started</h2>
 <div class="tw"><table>
-<tr><th>Dataset (the half I held out)</th><th>n</th><th>TPR</th><th>FPR</th></tr>
+<tr><th>Dataset (the half I held out)</th><th>Prompts</th><th>Attacks caught (TPR, %)</th><th>False alarms (FPR, %)</th></tr>
 <tr><td>safe-guard-prompt-injection</td><td>5,065</td><td>84.3</td><td>0.1</td></tr>
 <tr><td>deepset/prompt-injections</td><td>330</td><td>41.2</td><td>1.5</td></tr>
 <tr><td>jailbreak-classification</td><td>385</td><td>88.1</td><td>0.3</td></tr>
-<tr><td>Gandalf ignore-instructions</td><td>500</td><td>100.0</td><td>n/a</td></tr>
-<tr><td>NotInject (harmless text with scary words)</td><td>169</td><td>n/a</td><td>46.2</td></tr>
+<tr><td>Gandalf ignore-instructions</td><td>500</td><td>100.0</td><td>–</td></tr>
+<tr><td>NotInject (harmless text with scary words)</td><td>169</td><td>–</td><td>46.2</td></tr>
 <tr><td><b>All</b></td><td>6,449</td><td>85.4</td><td>2.0</td></tr>
 </table></div>
+<p class="cap">A dash means the set has nothing to measure there: Gandalf contains only attacks, NotInject only harmless prompts.</p>
 <p>That 46% is the habit I mentioned. NotInject is a set of perfectly innocent prompts that happen to contain words like "ignore" or "bypass", and the model flags almost half of them. It also misses most of the attacks in deepset.</p>
 
 <h2>What's actually going wrong inside</h2>
@@ -99,7 +100,7 @@ footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-syste
 <p>Half the false positives gone and 200 more attacks caught. I was pretty pleased with myself.</p>
 <p>Then I tried it on prompts written by actual people, from places I hadn't touched: jailbreaks collected from Reddit and Discord, attack emails from Microsoft's LLMail-Inject challenge, and ordinary questions from OpenAssistant and Dolly.</p>
 <div class="tw"><table>
-<tr><th>8,790 human-written prompts from new sources</th><th>TPR</th><th>FPR</th></tr>
+<tr><th>8,790 human-written prompts from new sources</th><th>Attacks caught (%)</th><th>False alarms (%)</th></tr>
 <tr><td>Original model</td><td>31.0</td><td>4.0</td></tr>
 <tr><td>v2</td><td>40.3</td><td class="b">6.6</td></tr>
 <tr><td>Original model with the threshold lowered to match</td><td class="g">46.1</td><td>6.6</td></tr>
