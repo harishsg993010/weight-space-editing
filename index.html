@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Editing a prompt-injection detector by hand</title>
+<title>Fixing a prompt-injection detector by hand, without training</title>
 <meta name="description" content="I tried to fix a prompt-injection classifier by writing a few thousand weights by hand, with no training. What worked, what didn't, and where I fooled myself.">
 <style>
 :root{--bg:#fbfaf7;--fg:#1d1c1a;--muted:#6a675f;--line:#dedad0;--card:#f3f0e8;--accent:#9a3d1f;--good:#1f6b3a;--bad:#a02a2a;--code:#efece3}
@@ -37,8 +37,8 @@ footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-syste
 <body>
 <main>
 
-<h1>I tried to fix a prompt-injection detector by editing its weights by hand</h1>
-<p class="sub">No fine-tuning, no gradients. Just reading the network, working out what's broken, and writing a few thousand numbers into it. It sort of worked. Here's the whole story, including the parts where I fooled myself.</p>
+<h1>I tried to fix a prompt-injection detector by editing its weights by hand, without training or fine-tuning</h1>
+<p class="sub">No gradients at all. Just reading the network, working out what's broken, and writing a few thousand numbers into it. It sort of worked. Here's the whole story, including the parts where I fooled myself.</p>
 <p class="meta">November 2026 · <a href="https://github.com/harishsg993010/weight-space-editing">code and results on GitHub</a> · built with Claude Code, run on Modal</p>
 
 <p>A while back I read Rikiya Takehi's post on <a href="https://rikiyat.github.io/blog/weight-space-programming/">weight-space programming</a>. The pitch is that a network's weights are a program, and you can read and edit that program directly instead of leaving everything to an optimizer. In one of his experiments a small Qwen model stops looping after a single direction is removed from two layers.</p>
