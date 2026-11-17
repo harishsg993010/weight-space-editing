@@ -56,11 +56,11 @@ footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-syste
 <tr><td>safe-guard-prompt-injection</td><td>5,065</td><td>84.3</td><td>0.1</td></tr>
 <tr><td>deepset/prompt-injections</td><td>330</td><td>41.2</td><td>1.5</td></tr>
 <tr><td>jailbreak-classification</td><td>385</td><td>88.1</td><td>0.3</td></tr>
-<tr><td>Gandalf ignore-instructions</td><td>500</td><td>100.0</td><td>–</td></tr>
-<tr><td>NotInject (harmless text with scary words)</td><td>169</td><td>–</td><td>46.2</td></tr>
+<tr><td>Gandalf ignore-instructions</td><td>500</td><td>100.0</td><td>n/a</td></tr>
+<tr><td>NotInject (harmless text with scary words)</td><td>169</td><td>n/a</td><td>46.2</td></tr>
 <tr><td><b>All</b></td><td>6,449</td><td>85.4</td><td>2.0</td></tr>
 </table></div>
-<p class="cap">A dash means the set has nothing to measure there: Gandalf contains only attacks, NotInject only harmless prompts.</p>
+<p class="cap">n/a means the set has nothing to measure there. Gandalf contains only attacks, and NotInject only harmless prompts.</p>
 <p>That 46% is the habit I mentioned. NotInject is a set of perfectly innocent prompts that happen to contain words like "ignore" or "bypass", and the model flags almost half of them. It also misses most of the attacks in deepset.</p>
 
 <h2>What's actually going wrong inside</h2>

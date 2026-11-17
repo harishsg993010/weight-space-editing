@@ -7,7 +7,7 @@ Gradient-free weight edits to `protectai/deberta-v3-base-prompt-injection-v2`, f
 
 | File | What it does |
 |---|---|
-| `wsp_app.py` | Data prep, baseline, per-layer diagnosis, edits v1–v3 |
+| `wsp_app.py` | Data prep, baseline, per-layer diagnosis, edits v1 to v3 |
 | `wsp_path.py` | The edit itself: wire coordinate, gated units, exact readout |
 | `wsp_lib.py` | Scoring, metrics, closed-form directions |
 | `wsp_eval2.py` | Human-written out-of-distribution eval |
