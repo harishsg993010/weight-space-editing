@@ -1,0 +1,2020 @@
+{
+ "cheap": [
+  {
+   "sim_gap_base": 2.384185791015625e-07,
+   "n_masked": 15365,
+   "n_path": 5316098,
+   "same15k": {
+    "heldout": {
+     "at_0.5": [
+      3328,
+      267
+     ],
+     "auroc": 0.9882924894670271,
+     "macro": {
+      "tpr": 0.8329171206419921,
+      "fpr": 0.05641344280793883
+     },
+     "at_heldout_calibrated_thr": [
+      3287,
+      202
+     ],
+     "at_v5_fp_on_this_split": [
+      3287,
+      202
+     ],
+     "per_ds": {
+      "deepset": [
+       62,
+       69,
+       6,
+       188
+      ],
+      "dolly_benign": [
+       0,
+       0,
+       3,
+       997
+      ],
+      "email_benign": [
+       0,
+       0,
+       19,
+       1471
+      ],
+      "gandalf": [
+       498,
+       0,
+       0,
+       0
+      ],
+      "jailbreak_cls": [
+       60,
+       7,
+       13,
+       305
+      ],
+      "llmail_inj": [
+       970,
+       30,
+       0,
+       0
+      ],
+      "notinject": [
+       0,
+       0,
+       50,
+       112
+      ],
+      "oasst_benign": [
+       0,
+       0,
+       12,
+       988
+      ],
+      "ood_alpaca_benign": [
+       0,
+       0,
+       1,
+       999
+      ],
+      "ood_roleplay_benign": [
+       0,
+       0,
+       17,
+       1424
+      ],
+      "safeguard": [
+       1458,
+       77,
+       4,
+       3520
+      ],
+      "wild_jailbreak": [
+       280,
+       115,
+       0,
+       0
+      ],
+      "wild_regular_benign": [
+       0,
+       0,
+       142,
+       858
+      ]
+     }
+    },
+    "unseen": {
+     "at_0.5": [
+      3056,
+      107
+     ],
+     "auroc": 0.9697788101309583,
+     "macro": {
+      "tpr": 0.8174011093725575,
+      "fpr": 0.01900175087543772
+     },
+     "at_heldout_calibrated_thr": [
+      2888,
+      85
+     ],
+     "at_v5_fp_on_this_split": [
+      2825,
+      78
+     ],
+     "per_ds": {
+      "llmail_phase2_inj": [
+       1023,
+       977,
+       0,
+       0
+      ],
+      "ood_multilingual_inj": [
+       958,
+       16,
+       0,
+       0
+      ],
+      "rubend_jailbreak": [
+       35,
+       7,
+       0,
+       0
+      ],
+      "tensortrust_inj": [
+       897,
+       25,
+       0,
+       0
+      ],
+      "toxicchat_benign": [
+       0,
+       0,
+       93,
+       2907
+      ],
+      "toxicchat_jailbreak": [
+       143,
+       39,
+       0,
+       0
+      ],
+      "ultrachat_benign": [
+       0,
+       0,
+       14,
+       1985
+      ]
+     }
+    },
+    "lr": 0.001,
+    "epochs": 13,
+    "val_loss": 0.08767665922641754,
+    "weights_changed": 15365,
+    "sweep": [
+     [
+      0.0001,
+      0.11087194085121155,
+      30
+     ],
+     [
+      0.0003,
+      0.09521885216236115,
+      30
+     ],
+     [
+      0.001,
+      0.08767665922641754,
+      13
+     ],
+     [
+      0.003,
+      0.08823232352733612,
+      13
+     ],
+     [
+      0.01,
+      0.09147365391254425,
+      15
+     ]
+    ]
+   },
+   "path": {
+    "heldout": {
+     "at_0.5": [
+      3351,
+      217
+     ],
+     "auroc": 0.9902954753602354,
+     "macro": {
+      "tpr": 0.8395092756588317,
+      "fpr": 0.04141386519774219
+     },
+     "at_heldout_calibrated_thr": [
+      3338,
+      202
+     ],
+     "at_v5_fp_on_this_split": [
+      3338,
+      202
+     ],
+     "per_ds": {
+      "deepset": [
+       65,
+       66,
+       3,
+       191
+      ],
+      "dolly_benign": [
+       0,
+       0,
+       0,
+       1000
+      ],
+      "email_benign": [
+       0,
+       0,
+       17,
+       1473
+      ],
+      "gandalf": [
+       498,
+       0,
+       0,
+       0
+      ],
+      "jailbreak_cls": [
+       60,
+       7,
+       4,
+       314
+      ],
+      "llmail_inj": [
+       975,
+       25,
+       0,
+       0
+      ],
+      "notinject": [
+       0,
+       0,
+       37,
+       125
+      ],
+      "oasst_benign": [
+       0,
+       0,
+       7,
+       993
+      ],
+      "ood_alpaca_benign": [
+       0,
+       0,
+       1,
+       999
+      ],
+      "ood_roleplay_benign": [
+       0,
+       0,
+       13,
+       1428
+      ],
+      "safeguard": [
+       1472,
+       63,
+       8,
+       3516
+      ],
+      "wild_jailbreak": [
+       281,
+       114,
+       0,
+       0
+      ],
+      "wild_regular_benign": [
+       0,
+       0,
+       127,
+       873
+      ]
+     }
+    },
+    "unseen": {
+     "at_0.5": [
+      2916,
+      111
+     ],
+     "auroc": 0.9525166198288202,
+     "macro": {
+      "tpr": 0.8054029643854076,
+      "fpr": 0.02033608470902118
+     },
+     "at_heldout_calibrated_thr": [
+      2883,
+      104
+     ],
+     "at_v5_fp_on_this_split": [
+      2706,
+      78
+     ],
+     "per_ds": {
+      "llmail_phase2_inj": [
+       898,
+       1102,
+       0,
+       0
+      ],
+      "ood_multilingual_inj": [
+       950,
+       24,
+       0,
+       0
+      ],
+      "rubend_jailbreak": [
+       36,
+       6,
+       0,
+       0
+      ],
+      "tensortrust_inj": [
+       890,
+       32,
+       0,
+       0
+      ],
+      "toxicchat_benign": [
+       0,
+       0,
+       89,
+       2911
+      ],
+      "toxicchat_jailbreak": [
+       142,
+       40,
+       0,
+       0
+      ],
+      "ultrachat_benign": [
+       0,
+       0,
+       22,
+       1977
+      ]
+     }
+    },
+    "lr": 0.0001,
+    "epochs": 13,
+    "val_loss": 0.07655572146177292,
+    "weights_changed": 5316077,
+    "sweep": [
+     [
+      1e-05,
+      0.08358510583639145,
+      29
+     ],
+     [
+      3e-05,
+      0.08044646680355072,
+      13
+     ],
+     [
+      0.0001,
+      0.07655572146177292,
+      13
+     ],
+     [
+      0.0003,
+      0.07755044847726822,
+      13
+     ]
+    ]
+   },
+   "base": {
+    "heldout": {
+     "at_0.5": [
+      2333,
+      253
+     ],
+     "auroc": 0.9558578986232606,
+     "macro": {
+      "tpr": 0.6628919669753112,
+      "fpr": 0.06253550579599604
+     },
+     "at_heldout_calibrated_thr": [
+      2227,
+      202
+     ],
+     "at_v5_fp_on_this_split": [
+      2227,
+      202
+     ],
+     "per_ds": {
+      "deepset": [
+       54,
+       77,
+       3,
+       191
+      ],
+      "dolly_benign": [
+       0,
+       0,
+       1,
+       999
+      ],
+      "email_benign": [
+       0,
+       0,
+       39,
+       1451
+      ],
+      "gandalf": [
+       498,
+       0,
+       0,
+       0
+      ],
+      "jailbreak_cls": [
+       59,
+       8,
+       1,
+       317
+      ],
+      "llmail_inj": [
+       158,
+       842,
+       0,
+       0
+      ],
+      "notinject": [
+       0,
+       0,
+       73,
+       89
+      ],
+      "oasst_benign": [
+       0,
+       0,
+       3,
+       997
+      ],
+      "ood_alpaca_benign": [
+       0,
+       0,
+       1,
+       999
+      ],
+      "ood_roleplay_benign": [
+       0,
+       0,
+       16,
+       1425
+      ],
+      "safeguard": [
+       1294,
+       241,
+       3,
+       3521
+      ],
+      "wild_jailbreak": [
+       270,
+       125,
+       0,
+       0
+      ],
+      "wild_regular_benign": [
+       0,
+       0,
+       113,
+       887
+      ]
+     }
+    },
+    "unseen": {
+     "at_0.5": [
+      2731,
+      90
+     ],
+     "auroc": 0.9729766341617839,
+     "macro": {
+      "tpr": 0.7689600121379508,
+      "fpr": 0.015333833583458396
+     },
+     "at_heldout_calibrated_thr": [
+      2616,
+      66
+     ],
+     "at_v5_fp_on_this_split": [
+      2645,
+      78
+     ],
+     "per_ds": {
+      "llmail_phase2_inj": [
+       715,
+       1285,
+       0,
+       0
+      ],
+      "ood_multilingual_inj": [
+       956,
+       18,
+       0,
+       0
+      ],
+      "rubend_jailbreak": [
+       36,
+       6,
+       0,
+       0
+      ],
+      "tensortrust_inj": [
+       902,
+       20,
+       0,
+       0
+      ],
+      "toxicchat_benign": [
+       0,
+       0,
+       86,
+       2914
+      ],
+      "toxicchat_jailbreak": [
+       122,
+       60,
+       0,
+       0
+      ],
+      "ultrachat_benign": [
+       0,
+       0,
+       4,
+       1995
+      ]
+     }
+    }
+   },
+   "v5": {
+    "heldout": {
+     "at_0.5": [
+      3198,
+      202
+     ],
+     "auroc": 0.9747611461377299,
+     "macro": {
+      "tpr": 0.793706662413307,
+      "fpr": 0.04537594995899399
+     },
+     "at_heldout_calibrated_thr": [
+      3196,
+      202
+     ],
+     "at_v5_fp_on_this_split": [
+      3196,
+      202
+     ],
+     "per_ds": {
+      "deepset": [
+       54,
+       77,
+       0,
+       194
+      ],
+      "dolly_benign": [
+       0,
+       0,
+       1,
+       999
+      ],
+      "email_benign": [
+       0,
+       0,
+       20,
+       1470
+      ],
+      "gandalf": [
+       498,
+       0,
+       0,
+       0
+      ],
+      "jailbreak_cls": [
+       57,
+       10,
+       3,
+       315
+      ],
+      "llmail_inj": [
+       929,
+       71,
+       0,
+       0
+      ],
+      "notinject": [
+       0,
+       0,
+       50,
+       112
+      ],
+      "oasst_benign": [
+       0,
+       0,
+       5,
+       995
+      ],
+      "ood_alpaca_benign": [
+       0,
+       0,
+       0,
+       1000
+      ],
+      "ood_roleplay_benign": [
+       0,
+       0,
+       15,
+       1426
+      ],
+      "safeguard": [
+       1400,
+       135,
+       3,
+       3521
+      ],
+      "wild_jailbreak": [
+       260,
+       135,
+       0,
+       0
+      ],
+      "wild_regular_benign": [
+       0,
+       0,
+       105,
+       895
+      ]
+     }
+    },
+    "unseen": {
+     "at_0.5": [
+      2763,
+      78
+     ],
+     "auroc": 0.9676458349922412,
+     "macro": {
+      "tpr": 0.7682631689955546,
+      "fpr": 0.013333833583458396
+     },
+     "at_heldout_calibrated_thr": [
+      2763,
+      78
+     ],
+     "at_v5_fp_on_this_split": [
+      2762,
+      78
+     ],
+     "per_ds": {
+      "llmail_phase2_inj": [
+       749,
+       1251,
+       0,
+       0
+      ],
+      "ood_multilingual_inj": [
+       956,
+       18,
+       0,
+       0
+      ],
+      "rubend_jailbreak": [
+       35,
+       7,
+       0,
+       0
+      ],
+      "tensortrust_inj": [
+       900,
+       22,
+       0,
+       0
+      ],
+      "toxicchat_benign": [
+       0,
+       0,
+       74,
+       2926
+      ],
+      "toxicchat_jailbreak": [
+       123,
+       59,
+       0,
+       0
+      ],
+      "ultrachat_benign": [
+       0,
+       0,
+       4,
+       1995
+      ]
+     }
+    }
+   }
+  },
+  {
+   "sim_gap_base": 2.384185791015625e-07,
+   "n_masked": 15365,
+   "n_path": 5316098,
+   "same15k": {
+    "heldout": {
+     "at_0.5": [
+      3304,
+      210
+     ],
+     "auroc": 0.9881831563923396,
+     "macro": {
+      "tpr": 0.8329441502896112,
+      "fpr": 0.042612960392085016
+     },
+     "at_heldout_calibrated_thr": [
+      3301,
+      202
+     ],
+     "at_v5_fp_on_this_split": [
+      3301,
+      202
+     ],
+     "per_ds": {
+      "deepset": [
+       69,
+       62,
+       3,
+       191
+      ],
+      "dolly_benign": [
+       0,
+       0,
+       1,
+       999
+      ],
+      "email_benign": [
+       0,
+       0,
+       8,
+       1482
+      ],
+      "gandalf": [
+       496,
+       2,
+       0,
+       0
+      ],
+      "jailbreak_cls": [
+       61,
+       6,
+       6,
+       312
+      ],
+      "llmail_inj": [
+       966,
+       34,
+       0,
+       0
+      ],
+      "notinject": [
+       0,
+       0,
+       40,
+       122
+      ],
+      "oasst_benign": [
+       0,
+       0,
+       11,
+       989
+      ],
+      "ood_alpaca_benign": [
+       0,
+       0,
+       1,
+       999
+      ],
+      "ood_roleplay_benign": [
+       0,
+       0,
+       23,
+       1418
+      ],
+      "safeguard": [
+       1455,
+       80,
+       9,
+       3515
+      ],
+      "wild_jailbreak": [
+       257,
+       138,
+       0,
+       0
+      ],
+      "wild_regular_benign": [
+       0,
+       0,
+       108,
+       892
+      ]
+     }
+    },
+    "unseen": {
+     "at_0.5": [
+      2953,
+      101
+     ],
+     "auroc": 0.9679578634173435,
+     "macro": {
+      "tpr": 0.7828729602922715,
+      "fpr": 0.01808520927130232
+     },
+     "at_heldout_calibrated_thr": [
+      2943,
+      100
+     ],
+     "at_v5_fp_on_this_split": [
+      2735,
+      78
+     ],
+     "per_ds": {
+      "llmail_phase2_inj": [
+       961,
+       1039,
+       0,
+       0
+      ],
+      "ood_multilingual_inj": [
+       949,
+       25,
+       0,
+       0
+      ],
+      "rubend_jailbreak": [
+       34,
+       8,
+       0,
+       0
+      ],
+      "tensortrust_inj": [
+       883,
+       39,
+       0,
+       0
+      ],
+      "toxicchat_benign": [
+       0,
+       0,
+       86,
+       2914
+      ],
+      "toxicchat_jailbreak": [
+       126,
+       56,
+       0,
+       0
+      ],
+      "ultrachat_benign": [
+       0,
+       0,
+       15,
+       1984
+      ]
+     }
+    },
+    "lr": 0.001,
+    "epochs": 26,
+    "val_loss": 0.09807484596967697,
+    "weights_changed": 15365,
+    "sweep": [
+     [
+      0.0001,
+      0.12542439997196198,
+      30
+     ],
+     [
+      0.0003,
+      0.112411729991436,
+      29
+     ],
+     [
+      0.001,
+      0.09807484596967697,
+      26
+     ],
+     [
+      0.003,
+      0.10090035200119019,
+      21
+     ],
+     [
+      0.01,
+      0.10223355889320374,
+      21
+     ]
+    ]
+   },
+   "path": {
+    "heldout": {
+     "at_0.5": [
+      3363,
+      254
+     ],
+     "auroc": 0.9897024202506661,
+     "macro": {
+      "tpr": 0.8478173013553704,
+      "fpr": 0.04728132947059162
+     },
+     "at_heldout_calibrated_thr": [
+      3339,
+      202
+     ],
+     "at_v5_fp_on_this_split": [
+      3339,
+      202
+     ],
+     "per_ds": {
+      "deepset": [
+       69,
+       62,
+       5,
+       189
+      ],
+      "dolly_benign": [
+       0,
+       0,
+       2,
+       998
+      ],
+      "email_benign": [
+       0,
+       0,
+       13,
+       1477
+      ],
+      "gandalf": [
+       495,
+       3,
+       0,
+       0
+      ],
+      "jailbreak_cls": [
+       61,
+       6,
+       11,
+       307
+      ],
+      "llmail_inj": [
+       970,
+       30,
+       0,
+       0
+      ],
+      "notinject": [
+       0,
+       0,
+       37,
+       125
+      ],
+      "oasst_benign": [
+       0,
+       0,
+       17,
+       983
+      ],
+      "ood_alpaca_benign": [
+       0,
+       0,
+       7,
+       993
+      ],
+      "ood_roleplay_benign": [
+       0,
+       0,
+       18,
+       1423
+      ],
+      "safeguard": [
+       1484,
+       51,
+       10,
+       3514
+      ],
+      "wild_jailbreak": [
+       284,
+       111,
+       0,
+       0
+      ],
+      "wild_regular_benign": [
+       0,
+       0,
+       134,
+       866
+      ]
+     }
+    },
+    "unseen": {
+     "at_0.5": [
+      3057,
+      120
+     ],
+     "auroc": 0.967890131424343,
+     "macro": {
+      "tpr": 0.8269574723817728,
+      "fpr": 0.021836084709021174
+     },
+     "at_heldout_calibrated_thr": [
+      2962,
+      103
+     ],
+     "at_v5_fp_on_this_split": [
+      2731,
+      78
+     ],
+     "per_ds": {
+      "llmail_phase2_inj": [
+       1038,
+       962,
+       0,
+       0
+      ],
+      "ood_multilingual_inj": [
+       949,
+       25,
+       0,
+       0
+      ],
+      "rubend_jailbreak": [
+       38,
+       4,
+       0,
+       0
+      ],
+      "tensortrust_inj": [
+       892,
+       30,
+       0,
+       0
+      ],
+      "toxicchat_benign": [
+       0,
+       0,
+       98,
+       2902
+      ],
+      "toxicchat_jailbreak": [
+       140,
+       42,
+       0,
+       0
+      ],
+      "ultrachat_benign": [
+       0,
+       0,
+       22,
+       1977
+      ]
+     }
+    },
+    "lr": 0.0001,
+    "epochs": 10,
+    "val_loss": 0.09275131672620773,
+    "weights_changed": 5316077,
+    "sweep": [
+     [
+      1e-05,
+      0.09893187135457993,
+      29
+     ],
+     [
+      3e-05,
+      0.09325453639030457,
+      21
+     ],
+     [
+      0.0001,
+      0.09275131672620773,
+      10
+     ],
+     [
+      0.0003,
+      0.09447192400693893,
+      14
+     ]
+    ]
+   }
+  },
+  {
+   "sim_gap_base": 2.682209014892578e-07,
+   "n_masked": 15365,
+   "n_path": 5316098,
+   "same15k": {
+    "heldout": {
+     "at_0.5": [
+      3289,
+      215
+     ],
+     "auroc": 0.9867608104068829,
+     "macro": {
+      "tpr": 0.8183778208569922,
+      "fpr": 0.04742753081838542
+     },
+     "at_heldout_calibrated_thr": [
+      3276,
+      202
+     ],
+     "at_v5_fp_on_this_split": [
+      3276,
+      202
+     ],
+     "per_ds": {
+      "deepset": [
+       57,
+       74,
+       4,
+       190
+      ],
+      "dolly_benign": [
+       0,
+       0,
+       2,
+       998
+      ],
+      "email_benign": [
+       0,
+       0,
+       19,
+       1471
+      ],
+      "gandalf": [
+       497,
+       1,
+       0,
+       0
+      ],
+      "jailbreak_cls": [
+       60,
+       7,
+       4,
+       314
+      ],
+      "llmail_inj": [
+       956,
+       44,
+       0,
+       0
+      ],
+      "notinject": [
+       0,
+       0,
+       48,
+       114
+      ],
+      "oasst_benign": [
+       0,
+       0,
+       6,
+       994
+      ],
+      "ood_alpaca_benign": [
+       0,
+       0,
+       0,
+       1000
+      ],
+      "ood_roleplay_benign": [
+       0,
+       0,
+       12,
+       1429
+      ],
+      "safeguard": [
+       1450,
+       85,
+       6,
+       3518
+      ],
+      "wild_jailbreak": [
+       269,
+       126,
+       0,
+       0
+      ],
+      "wild_regular_benign": [
+       0,
+       0,
+       114,
+       886
+      ]
+     }
+    },
+    "unseen": {
+     "at_0.5": [
+      2933,
+      100
+     ],
+     "auroc": 0.9724501210921797,
+     "macro": {
+      "tpr": 0.795355469332715,
+      "fpr": 0.017668167417041854
+     },
+     "at_heldout_calibrated_thr": [
+      2912,
+      96
+     ],
+     "at_v5_fp_on_this_split": [
+      2821,
+      78
+     ],
+     "per_ds": {
+      "llmail_phase2_inj": [
+       915,
+       1085,
+       0,
+       0
+      ],
+      "ood_multilingual_inj": [
+       951,
+       23,
+       0,
+       0
+      ],
+      "rubend_jailbreak": [
+       34,
+       8,
+       0,
+       0
+      ],
+      "tensortrust_inj": [
+       894,
+       28,
+       0,
+       0
+      ],
+      "toxicchat_benign": [
+       0,
+       0,
+       88,
+       2912
+      ],
+      "toxicchat_jailbreak": [
+       139,
+       43,
+       0,
+       0
+      ],
+      "ultrachat_benign": [
+       0,
+       0,
+       12,
+       1987
+      ]
+     }
+    },
+    "lr": 0.01,
+    "epochs": 7,
+    "val_loss": 0.10372822731733322,
+    "weights_changed": 15365,
+    "sweep": [
+     [
+      0.0001,
+      0.12488386780023575,
+      30
+     ],
+     [
+      0.0003,
+      0.1083662360906601,
+      29
+     ],
+     [
+      0.001,
+      0.10804206877946854,
+      13
+     ],
+     [
+      0.003,
+      0.10373082756996155,
+      18
+     ],
+     [
+      0.01,
+      0.10372822731733322,
+      7
+     ]
+    ]
+   },
+   "path": {
+    "heldout": {
+     "at_0.5": [
+      3336,
+      217
+     ],
+     "auroc": 0.9890581927024684,
+     "macro": {
+      "tpr": 0.8399630886590708,
+      "fpr": 0.042224106838628456
+     },
+     "at_heldout_calibrated_thr": [
+      3329,
+      202
+     ],
+     "at_v5_fp_on_this_split": [
+      3329,
+      202
+     ],
+     "per_ds": {
+      "deepset": [
+       74,
+       57,
+       5,
+       189
+      ],
+      "dolly_benign": [
+       0,
+       0,
+       1,
+       999
+      ],
+      "email_benign": [
+       0,
+       0,
+       8,
+       1482
+      ],
+      "gandalf": [
+       496,
+       2,
+       0,
+       0
+      ],
+      "jailbreak_cls": [
+       59,
+       8,
+       12,
+       306
+      ],
+      "llmail_inj": [
+       971,
+       29,
+       0,
+       0
+      ],
+      "notinject": [
+       0,
+       0,
+       34,
+       128
+      ],
+      "oasst_benign": [
+       0,
+       0,
+       16,
+       984
+      ],
+      "ood_alpaca_benign": [
+       0,
+       0,
+       3,
+       997
+      ],
+      "ood_roleplay_benign": [
+       0,
+       0,
+       17,
+       1424
+      ],
+      "safeguard": [
+       1472,
+       63,
+       13,
+       3511
+      ],
+      "wild_jailbreak": [
+       264,
+       131,
+       0,
+       0
+      ],
+      "wild_regular_benign": [
+       0,
+       0,
+       108,
+       892
+      ]
+     }
+    },
+    "unseen": {
+     "at_0.5": [
+      2939,
+      144
+     ],
+     "auroc": 0.9541781414535335,
+     "macro": {
+      "tpr": 0.7988343023299354,
+      "fpr": 0.025669167917291978
+     },
+     "at_heldout_calibrated_thr": [
+      2909,
+      142
+     ],
+     "at_v5_fp_on_this_split": [
+      2554,
+      78
+     ],
+     "per_ds": {
+      "llmail_phase2_inj": [
+       937,
+       1063,
+       0,
+       0
+      ],
+      "ood_multilingual_inj": [
+       945,
+       29,
+       0,
+       0
+      ],
+      "rubend_jailbreak": [
+       36,
+       6,
+       0,
+       0
+      ],
+      "tensortrust_inj": [
+       887,
+       35,
+       0,
+       0
+      ],
+      "toxicchat_benign": [
+       0,
+       0,
+       124,
+       2876
+      ],
+      "toxicchat_jailbreak": [
+       134,
+       48,
+       0,
+       0
+      ],
+      "ultrachat_benign": [
+       0,
+       0,
+       20,
+       1979
+      ]
+     }
+    },
+    "lr": 3e-05,
+    "epochs": 21,
+    "val_loss": 0.0935053601861,
+    "weights_changed": 5316073,
+    "sweep": [
+     [
+      1e-05,
+      0.09938398748636246,
+      29
+     ],
+     [
+      3e-05,
+      0.0935053601861,
+      21
+     ],
+     [
+      0.0001,
+      0.09683695435523987,
+      7
+     ],
+     [
+      0.0003,
+      0.10223931819200516,
+      5
+     ]
+    ]
+   }
+  }
+ ],
+ "full": [
+  {
+   "heldout": {
+    "at_0.5": [
+     3449,
+     127
+    ],
+    "auroc": 0.9956155008527829,
+    "macro": {
+     "tpr": 0.9056665161476646,
+     "fpr": 0.018312837655527405
+    },
+    "at_heldout_calibrated_thr": [
+     3490,
+     202
+    ],
+    "at_v5_fp_on_this_split": [
+     3490,
+     202
+    ],
+    "per_ds": {
+     "deepset": [
+      104,
+      27,
+      3,
+      191
+     ],
+     "dolly_benign": [
+      0,
+      0,
+      0,
+      1000
+     ],
+     "email_benign": [
+      0,
+      0,
+      0,
+      1490
+     ],
+     "gandalf": [
+      496,
+      2,
+      0,
+      0
+     ],
+     "jailbreak_cls": [
+      62,
+      5,
+      5,
+      313
+     ],
+     "llmail_inj": [
+      989,
+      11,
+      0,
+      0
+     ],
+     "notinject": [
+      0,
+      0,
+      7,
+      155
+     ],
+     "oasst_benign": [
+      0,
+      0,
+      6,
+      994
+     ],
+     "ood_alpaca_benign": [
+      0,
+      0,
+      1,
+      999
+     ],
+     "ood_roleplay_benign": [
+      0,
+      0,
+      6,
+      1435
+     ],
+     "safeguard": [
+      1501,
+      34,
+      2,
+      3522
+     ],
+     "wild_jailbreak": [
+      297,
+      98,
+      0,
+      0
+     ],
+     "wild_regular_benign": [
+      0,
+      0,
+      97,
+      903
+     ]
+    }
+   },
+   "unseen": {
+    "at_0.5": [
+     3303,
+     79
+    ],
+    "auroc": 0.9580608354680644,
+    "macro": {
+     "tpr": 0.8678683687110533,
+     "fpr": 0.013333583458395864
+    },
+    "at_heldout_calibrated_thr": [
+     3373,
+     113
+    ],
+    "at_v5_fp_on_this_split": [
+     3295,
+     78
+    ],
+    "per_ds": {
+     "llmail_phase2_inj": [
+      1302,
+      698,
+      0,
+      0
+     ],
+     "ood_multilingual_inj": [
+      917,
+      57,
+      0,
+      0
+     ],
+     "rubend_jailbreak": [
+      41,
+      1,
+      0,
+      0
+     ],
+     "tensortrust_inj": [
+      898,
+      24,
+      0,
+      0
+     ],
+     "toxicchat_benign": [
+      0,
+      0,
+      77,
+      2923
+     ],
+     "toxicchat_jailbreak": [
+      145,
+      37,
+      0,
+      0
+     ],
+     "ultrachat_benign": [
+      0,
+      0,
+      2,
+      1997
+     ]
+    }
+   },
+   "train_loss": [
+    0.125863717195102,
+    0.05449217264824208,
+    0.030269142384999868
+   ],
+   "lr": 2e-05,
+   "epochs": 3,
+   "weights_changed": 184423682
+  },
+  {
+   "heldout": {
+    "at_0.5": [
+     3424,
+     112
+    ],
+    "auroc": 0.9950617481585481,
+    "macro": {
+     "tpr": 0.8922285307205583,
+     "fpr": 0.0154713470564621
+    },
+    "at_heldout_calibrated_thr": [
+     3472,
+     202
+    ],
+    "at_v5_fp_on_this_split": [
+     3472,
+     202
+    ],
+    "per_ds": {
+     "deepset": [
+      95,
+      36,
+      2,
+      192
+     ],
+     "dolly_benign": [
+      0,
+      0,
+      0,
+      1000
+     ],
+     "email_benign": [
+      0,
+      0,
+      0,
+      1490
+     ],
+     "gandalf": [
+      497,
+      1,
+      0,
+      0
+     ],
+     "jailbreak_cls": [
+      63,
+      4,
+      3,
+      315
+     ],
+     "llmail_inj": [
+      983,
+      17,
+      0,
+      0
+     ],
+     "notinject": [
+      0,
+      0,
+      6,
+      156
+     ],
+     "oasst_benign": [
+      0,
+      0,
+      6,
+      994
+     ],
+     "ood_alpaca_benign": [
+      0,
+      0,
+      1,
+      999
+     ],
+     "ood_roleplay_benign": [
+      0,
+      0,
+      3,
+      1438
+     ],
+     "safeguard": [
+      1497,
+      38,
+      3,
+      3521
+     ],
+     "wild_jailbreak": [
+      289,
+      106,
+      0,
+      0
+     ],
+     "wild_regular_benign": [
+      0,
+      0,
+      88,
+      912
+     ]
+    }
+   },
+   "unseen": {
+    "at_0.5": [
+     3145,
+     68
+    ],
+    "auroc": 0.9302754968469421,
+    "macro": {
+     "tpr": 0.8507822515743939,
+     "fpr": 0.011583708520927131
+    },
+    "at_heldout_calibrated_thr": [
+     3218,
+     99
+    ],
+    "at_v5_fp_on_this_split": [
+     3177,
+     78
+    ],
+    "per_ds": {
+     "llmail_phase2_inj": [
+      1155,
+      845,
+      0,
+      0
+     ],
+     "ood_multilingual_inj": [
+      917,
+      57,
+      0,
+      0
+     ],
+     "rubend_jailbreak": [
+      41,
+      1,
+      0,
+      0
+     ],
+     "tensortrust_inj": [
+      887,
+      35,
+      0,
+      0
+     ],
+     "toxicchat_benign": [
+      0,
+      0,
+      65,
+      2935
+     ],
+     "toxicchat_jailbreak": [
+      145,
+      37,
+      0,
+      0
+     ],
+     "ultrachat_benign": [
+      0,
+      0,
+      3,
+      1996
+     ]
+    }
+   },
+   "train_loss": [
+    0.13081059771185777,
+    0.052009133359015365,
+    0.033699171327014055
+   ],
+   "lr": 2e-05,
+   "epochs": 3,
+   "weights_changed": 184423682
+  },
+  {
+   "heldout": {
+    "at_0.5": [
+     3437,
+     112
+    ],
+    "auroc": 0.9953276961543652,
+    "macro": {
+     "tpr": 0.9013740423455602,
+     "fpr": 0.017619832646692306
+    },
+    "at_heldout_calibrated_thr": [
+     3485,
+     202
+    ],
+    "at_v5_fp_on_this_split": [
+     3485,
+     202
+    ],
+    "per_ds": {
+     "deepset": [
+      102,
+      29,
+      1,
+      193
+     ],
+     "dolly_benign": [
+      0,
+      0,
+      0,
+      1000
+     ],
+     "email_benign": [
+      0,
+      0,
+      1,
+      1489
+     ],
+     "gandalf": [
+      498,
+      0,
+      0,
+      0
+     ],
+     "jailbreak_cls": [
+      62,
+      5,
+      3,
+      315
+     ],
+     "llmail_inj": [
+      986,
+      14,
+      0,
+      0
+     ],
+     "notinject": [
+      0,
+      0,
+      11,
+      151
+     ],
+     "oasst_benign": [
+      0,
+      0,
+      6,
+      994
+     ],
+     "ood_alpaca_benign": [
+      0,
+      0,
+      1,
+      999
+     ],
+     "ood_roleplay_benign": [
+      0,
+      0,
+      5,
+      1436
+     ],
+     "safeguard": [
+      1495,
+      40,
+      2,
+      3522
+     ],
+     "wild_jailbreak": [
+      294,
+      101,
+      0,
+      0
+     ],
+     "wild_regular_benign": [
+      0,
+      0,
+      82,
+      918
+     ]
+    }
+   },
+   "unseen": {
+    "at_0.5": [
+     3268,
+     71
+    ],
+    "auroc": 0.9352526816042821,
+    "macro": {
+     "tpr": 0.86136461257863,
+     "fpr": 0.01200025012506253
+    },
+    "at_heldout_calibrated_thr": [
+     3357,
+     107
+    ],
+    "at_v5_fp_on_this_split": [
+     3290,
+     78
+    ],
+    "per_ds": {
+     "llmail_phase2_inj": [
+      1278,
+      722,
+      0,
+      0
+     ],
+     "ood_multilingual_inj": [
+      913,
+      61,
+      0,
+      0
+     ],
+     "rubend_jailbreak": [
+      41,
+      1,
+      0,
+      0
+     ],
+     "tensortrust_inj": [
+      893,
+      29,
+      0,
+      0
+     ],
+     "toxicchat_benign": [
+      0,
+      0,
+      69,
+      2931
+     ],
+     "toxicchat_jailbreak": [
+      143,
+      39,
+      0,
+      0
+     ],
+     "ultrachat_benign": [
+      0,
+      0,
+      2,
+      1997
+     ]
+    }
+   },
+   "train_loss": [
+    0.12926386252391858,
+    0.05131495799798272,
+    0.030466661067770302
+   ],
+   "lr": 2e-05,
+   "epochs": 3,
+   "weights_changed": 184423682
+  }
+ ]
+}

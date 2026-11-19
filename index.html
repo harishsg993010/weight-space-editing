@@ -173,9 +173,34 @@ footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-syste
 <p>But it did not help detection. It caught only about 28 more attacks, and it made no improvement on top of version 5. It also changes 234,357 numbers instead of 15,363.</p>
 <p>So version 5 is still the best one.</p>
 
+<h2>Does this beat normal training?</h2>
+<p>This is the question I had left open. Normal training means backpropagation: show the model examples and let it adjust its own weights step by step. So I ran it on the same data and compared it with version 5.</p>
+<p>I trained three models. All three saw only the same examples from the 13 sources which I used to build version 5. I ran each one three times with a different random seed.</p>
+<ul>
+<li><b>Same weights:</b> training is allowed to change only the same numbers which version 5 changed, and nothing else.</li>
+<li><b>Last layer:</b> training is allowed to change the whole last part of the model where my change lives. That is 5.3 million numbers.</li>
+<li><b>Full fine-tuning:</b> training is allowed to change all 184 million numbers. I used one standard setting and did not tune it.</li>
+</ul>
+<p>To keep the comparison fair, I set the cut-off score of every model so that it raises the same number of false alarms as version 5. Then I counted the attacks caught.</p>
+<div class="tw"><table>
+<tr><th>Model</th><th>Numbers changed</th><th>New examples from the 13 sources, attacks caught out of 3,626 (at 202 false alarms)</th><th>The 7 sources never seen, attacks caught out of 4,120 (at 78 false alarms)</th></tr>
+<tr><td>Original model</td><td>0</td><td>2,227</td><td>2,645</td></tr>
+<tr><td>Version 5 (by hand)</td><td>15,363</td><td>3,196</td><td>2,762</td></tr>
+<tr><td>Training, same weights</td><td>15,365</td><td>3,276 to 3,301</td><td>2,735 to 2,825</td></tr>
+<tr><td>Training, last layer</td><td>5.3 million</td><td>3,329 to 3,339</td><td class="b">2,554 to 2,731</td></tr>
+<tr><td>Full fine-tuning</td><td>184 million</td><td class="g">3,472 to 3,490</td><td class="g">3,177 to 3,295</td></tr>
+</table></div>
+<p class="cap">"3,276 to 3,301" is the lowest and highest result of the three runs. The same weights row has 15,365 numbers because version 5 also moved the two final bias numbers.</p>
+<p>So the answer is no. My hand change does not beat normal training.</p>
+<p>Full fine-tuning is better on both sets. On the 7 sources it never saw, it catches around 400 to 500 more attacks than version 5 with the same 78 false alarms. With the normal cut-off it also raises fewer false alarms on the first set, 112 to 127 against 202 for version 5.</p>
+<p>The same weights row is the closest comparison, because it has the same budget as my change. On new examples from the 13 sources, training won in all three runs. On the 7 sources never seen it is a tie. Two runs were better than version 5 and one run was worse.</p>
+<p>There is one place where the hand change did better. Training only the last layer was worse than version 5 on the 7 sources never seen, in all three runs. It learned my 13 sources well but it carried less of that to new sources.</p>
+<p>Two more things I noticed about full fine-tuning. Most of its improvement on the 7 sources came from LLMail-Inject phase 2, where it went from 715 attacks caught to around 1,300. Those emails are close to the phase 1 emails it trained on. And in one run it lost some attacks in other languages, going from 956 caught to 917.</p>
+
 <h2>Observations and Analysis</h2>
 <p>Looking inside the model before changing it was very useful. I found that the last part of the last layer throws away something the model already knows, and that told me exactly where to make the change.</p>
 <p>Changing a few thousand numbers by hand can give a big improvement on the type of data you used to build the change. It gives only a small improvement on new types of data.</p>
+<p>Normal fine-tuning on the same data beats the hand change. Even when training is allowed to touch only the same 15,363 numbers, it does as well or better. So I see this method as a way to understand a model, and not as a replacement for training.</p>
 <p>Note: Always compare your changed model with the original model at the same number of false alarms. Two times I had a better looking score but actually a worse model.</p>
 <p>Note: Always keep some data sources completely aside, and read the actual messages in your datasets. I removed one dataset because the original model marked 82% of its normal messages as attacks. When I read the messages, I could not tell its normal messages and attack messages apart myself. The labels were the problem and not the model.</p>
 
@@ -186,7 +211,8 @@ footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-syste
 <li>I looked at the first test sets many times while building versions 1 to 3. So those numbers are not a clean test anymore.</li>
 <li>Some datasets have wrong labels. For example, deepset marks simple role play requests as attacks.</li>
 <li>The model reads only the first 512 pieces of a message. If an attack is hidden late in a long email, no version can see it.</li>
-<li>I did not compare this with normal fine-tuning on the same data. That comparison is needed to know if this method is really worth it.</li>
+<li>In the comparison with normal training, I did not tune the full fine-tuning settings and I ran only three seeds. A tuned run could do even better.</li>
+<li>For the 7 sources never seen, the cut-off in that comparison was set on those same messages, in the same way for every model. Also, the same weights and last layer models were scored by an exact calculation of the last layer and were not saved as models.</li>
 </ul>
 
 <h2>How to run it yourself</h2>
@@ -201,7 +227,8 @@ modal run wsp_v4.py --stage select       # the stricter test
 modal run wsp_v4.py --stage final --cfg '{"lam":0.3,"fn_q":0.99,"fp_q":0.995,"fn_delta":16,"fp_delta":16,"rounds":2,"order":["fn","fp"]}'
 modal run wsp_v4.py --stage bake --cfg 3.79   # version 5
 modal run wsp_probe.py --stage combo     # search for a better signal
-modal run wsp_v6.py                      # version 6</code></pre>
+modal run wsp_v6.py                      # version 6
+modal run wsp_backprop.py                # compare with normal training</code></pre>
 <p>The code which changes the weights is in <code>wsp_path.py</code>. It is about 120 lines. The numbers behind every table are in the <code>results</code> folder. The changed model (version 5) is on Hugging Face: <a href="https://huggingface.co/rootxhacker/deberta-v3-base-prompt-injection-v2-weight-edited">rootxhacker/deberta-v3-base-prompt-injection-v2-weight-edited</a>.</p>
 
 <h2>Credits and data</h2>
