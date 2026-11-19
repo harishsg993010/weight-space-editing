@@ -1,0 +1,913 @@
+{
+ "fit_A": {
+  "lam": 0.1,
+  "val_loss": 0.0764649704934536
+ },
+ "ideal_readout_A": {
+  "heldout": {
+   "at_0.5": [
+    3391,
+    128
+   ],
+   "auroc": 0.9931491132150928,
+   "macro": {
+    "tpr": 0.8591666151068429,
+    "fpr": 0.020454585317025136
+   },
+   "at_heldout_calibrated_thr": [
+    3452,
+    202
+   ],
+   "at_v5_fp_on_this_split": [
+    3452,
+    202
+   ],
+   "per_ds": {
+    "deepset": [
+     76,
+     55,
+     0,
+     194
+    ],
+    "dolly_benign": [
+     0,
+     0,
+     1,
+     999
+    ],
+    "email_benign": [
+     0,
+     0,
+     1,
+     1489
+    ],
+    "gandalf": [
+     497,
+     1,
+     0,
+     0
+    ],
+    "jailbreak_cls": [
+     61,
+     6,
+     2,
+     316
+    ],
+    "llmail_inj": [
+     992,
+     8,
+     0,
+     0
+    ],
+    "notinject": [
+     0,
+     0,
+     15,
+     147
+    ],
+    "oasst_benign": [
+     0,
+     0,
+     4,
+     996
+    ],
+    "ood_alpaca_benign": [
+     0,
+     0,
+     2,
+     998
+    ],
+    "ood_roleplay_benign": [
+     0,
+     0,
+     7,
+     1434
+    ],
+    "safeguard": [
+     1486,
+     49,
+     4,
+     3520
+    ],
+    "wild_jailbreak": [
+     279,
+     116,
+     0,
+     0
+    ],
+    "wild_regular_benign": [
+     0,
+     0,
+     92,
+     908
+    ]
+   }
+  },
+  "unseen": {
+   "at_0.5": [
+    3238,
+    69
+   ],
+   "auroc": 0.9764849086322118,
+   "macro": {
+    "tpr": 0.843054666809136,
+    "fpr": 0.012000750375187594
+   },
+   "at_heldout_calibrated_thr": [
+    3418,
+    121
+   ],
+   "at_v5_fp_on_this_split": [
+    3278,
+    78
+   ],
+   "per_ds": {
+    "llmail_phase2_inj": [
+     1222,
+     778,
+     0,
+     0
+    ],
+    "ood_multilingual_inj": [
+     951,
+     23,
+     0,
+     0
+    ],
+    "rubend_jailbreak": [
+     39,
+     3,
+     0,
+     0
+    ],
+    "tensortrust_inj": [
+     893,
+     29,
+     0,
+     0
+    ],
+    "toxicchat_benign": [
+     0,
+     0,
+     63,
+     2937
+    ],
+    "toxicchat_jailbreak": [
+     133,
+     49,
+     0,
+     0
+    ],
+    "ultrachat_benign": [
+     0,
+     0,
+     6,
+     1993
+    ]
+   }
+  }
+ },
+ "stats": {
+  "head": 8,
+  "head_ablation_mean_abs_logit_change": [
+   0.184,
+   0.201,
+   0.633,
+   0.229,
+   0.316,
+   0.276,
+   2.016,
+   0.184,
+   0.088,
+   0.39,
+   0.15,
+   0.198
+  ],
+  "coord_w_word_score": 593,
+  "coord_w2_wire": 584,
+  "empty_cost": {
+   "255": 0.0108,
+   "726": 0.0107,
+   "593": 0.0102,
+   "178": 0.0177,
+   "273": 0.0223,
+   "66": 0.0215,
+   "584": 0.009,
+   "550": 0.0143
+  },
+  "m10": 0.4296644378478226,
+  "gamma_w": 0.4927598834037781,
+  "word_score_std": 1.2119793891906738
+ },
+ "word_score_check": {
+  "corr_realised_vs_intended": 0.9980131387710571
+ },
+ "fit_B": {
+  "lam": 0.01,
+  "val_loss": 0.0762406420057865,
+  "share_of_direction_on_word_score": 0.7797487092511257
+ },
+ "ideal_readout_B": {
+  "heldout": {
+   "at_0.5": [
+    3411,
+    128
+   ],
+   "auroc": 0.9929005118086411,
+   "macro": {
+    "tpr": 0.8795234204480061,
+    "fpr": 0.02026440933882546
+   },
+   "at_heldout_calibrated_thr": [
+    3460,
+    202
+   ],
+   "at_v5_fp_on_this_split": [
+    3460,
+    202
+   ],
+   "per_ds": {
+    "deepset": [
+     87,
+     44,
+     0,
+     194
+    ],
+    "dolly_benign": [
+     0,
+     0,
+     2,
+     998
+    ],
+    "email_benign": [
+     0,
+     0,
+     1,
+     1489
+    ],
+    "gandalf": [
+     497,
+     1,
+     0,
+     0
+    ],
+    "jailbreak_cls": [
+     63,
+     4,
+     3,
+     315
+    ],
+    "llmail_inj": [
+     992,
+     8,
+     0,
+     0
+    ],
+    "notinject": [
+     0,
+     0,
+     14,
+     148
+    ],
+    "oasst_benign": [
+     0,
+     0,
+     5,
+     995
+    ],
+    "ood_alpaca_benign": [
+     0,
+     0,
+     2,
+     998
+    ],
+    "ood_roleplay_benign": [
+     0,
+     0,
+     8,
+     1433
+    ],
+    "safeguard": [
+     1491,
+     44,
+     2,
+     3522
+    ],
+    "wild_jailbreak": [
+     281,
+     114,
+     0,
+     0
+    ],
+    "wild_regular_benign": [
+     0,
+     0,
+     91,
+     909
+    ]
+   }
+  },
+  "unseen": {
+   "at_0.5": [
+    3212,
+    84
+   ],
+   "auroc": 0.9733196639327865,
+   "macro": {
+    "tpr": 0.8522470712767778,
+    "fpr": 0.014834583958645989
+   },
+   "at_heldout_calibrated_thr": [
+    3382,
+    126
+   ],
+   "at_v5_fp_on_this_split": [
+    3197,
+    78
+   ],
+   "per_ds": {
+    "llmail_phase2_inj": [
+     1211,
+     789,
+     0,
+     0
+    ],
+    "ood_multilingual_inj": [
+     947,
+     27,
+     0,
+     0
+    ],
+    "rubend_jailbreak": [
+     41,
+     1,
+     0,
+     0
+    ],
+    "tensortrust_inj": [
+     875,
+     47,
+     0,
+     0
+    ],
+    "toxicchat_benign": [
+     0,
+     0,
+     74,
+     2926
+    ],
+    "toxicchat_jailbreak": [
+     138,
+     44,
+     0,
+     0
+    ],
+    "ultrachat_benign": [
+     0,
+     0,
+     10,
+     1989
+    ]
+   }
+  }
+ },
+ "installed_not_connected": {
+  "mean_abs_logit_change": 0.08469125979014391,
+  "prediction_flips": 27,
+  "n": 38648
+ },
+ "head_check": {
+  "corr_wire_vs_intended": 0.9919039607048035,
+  "sign_agreement_with_intended": 0.9975419044494629
+ },
+ "connect": {
+  "a": 0.021388352344526736,
+  "gain_c": 138.37071079494564,
+  "bias_shift": -3.193541429841263,
+  "pool_units": [
+   688,
+   76
+  ],
+  "logit_rescale": 0.25009467128019
+ },
+ "weights_changed": 178253,
+ "weights_changed_by_tensor": {
+  "classifier.bias": 2,
+  "classifier.weight": 1536,
+  "deberta.encoder.layer.10.attention.output.LayerNorm.bias": 2,
+  "deberta.encoder.layer.10.attention.output.LayerNorm.weight": 2,
+  "deberta.encoder.layer.10.intermediate.dense.bias": 3072,
+  "deberta.encoder.layer.10.output.LayerNorm.bias": 2,
+  "deberta.encoder.layer.10.output.LayerNorm.weight": 2,
+  "deberta.encoder.layer.10.output.dense.bias": 2,
+  "deberta.encoder.layer.10.output.dense.weight": 6144,
+  "deberta.encoder.layer.11.attention.output.LayerNorm.bias": 1,
+  "deberta.encoder.layer.11.attention.output.dense.bias": 1,
+  "deberta.encoder.layer.11.attention.output.dense.weight": 49856,
+  "deberta.encoder.layer.11.attention.self.query_proj.bias": 64,
+  "deberta.encoder.layer.11.attention.self.query_proj.weight": 49152,
+  "deberta.encoder.layer.11.attention.self.value_proj.bias": 64,
+  "deberta.encoder.layer.11.attention.self.value_proj.weight": 49152,
+  "deberta.encoder.layer.11.intermediate.dense.bias": 3072,
+  "deberta.encoder.layer.11.intermediate.dense.weight": 6144,
+  "deberta.encoder.layer.11.output.LayerNorm.bias": 1,
+  "deberta.encoder.layer.11.output.dense.bias": 2,
+  "deberta.encoder.layer.11.output.dense.weight": 6144,
+  "pooler.dense.bias": 768,
+  "pooler.dense.weight": 3068
+ },
+ "sim_vs_real_max_logit_gap": 1.811981201171875e-05,
+ "real_decision_flips_vs_sim": 0,
+ "edit": {
+  "heldout": {
+   "at_0.5": [
+    3420,
+    195
+   ],
+   "auroc": 0.9919953667755421,
+   "macro": {
+    "tpr": 0.8748430671778347,
+    "fpr": 0.03470599044543391
+   },
+   "at_heldout_calibrated_thr": [
+    3429,
+    202
+   ],
+   "at_v5_fp_on_this_split": [
+    3429,
+    202
+   ],
+   "per_ds": {
+    "deepset": [
+     76,
+     55,
+     2,
+     192
+    ],
+    "dolly_benign": [
+     0,
+     0,
+     2,
+     998
+    ],
+    "email_benign": [
+     0,
+     0,
+     6,
+     1484
+    ],
+    "gandalf": [
+     498,
+     0,
+     0,
+     0
+    ],
+    "jailbreak_cls": [
+     63,
+     4,
+     1,
+     317
+    ],
+    "llmail_inj": [
+     987,
+     13,
+     0,
+     0
+    ],
+    "notinject": [
+     0,
+     0,
+     29,
+     133
+    ],
+    "oasst_benign": [
+     0,
+     0,
+     6,
+     994
+    ],
+    "ood_alpaca_benign": [
+     0,
+     0,
+     2,
+     998
+    ],
+    "ood_roleplay_benign": [
+     0,
+     0,
+     14,
+     1427
+    ],
+    "safeguard": [
+     1492,
+     43,
+     3,
+     3521
+    ],
+    "wild_jailbreak": [
+     304,
+     91,
+     0,
+     0
+    ],
+    "wild_regular_benign": [
+     0,
+     0,
+     130,
+     870
+    ]
+   }
+  },
+  "unseen": {
+   "at_0.5": [
+    3319,
+    96
+   ],
+   "auroc": 0.9815144582314521,
+   "macro": {
+    "tpr": 0.8625069685076838,
+    "fpr": 0.016584208771052194
+   },
+   "at_heldout_calibrated_thr": [
+    3338,
+    99
+   ],
+   "at_v5_fp_on_this_split": [
+    3231,
+    78
+   ],
+   "per_ds": {
+    "llmail_phase2_inj": [
+     1282,
+     718,
+     0,
+     0
+    ],
+    "ood_multilingual_inj": [
+     956,
+     18,
+     0,
+     0
+    ],
+    "rubend_jailbreak": [
+     40,
+     2,
+     0,
+     0
+    ],
+    "tensortrust_inj": [
+     903,
+     19,
+     0,
+     0
+    ],
+    "toxicchat_benign": [
+     0,
+     0,
+     89,
+     2911
+    ],
+    "toxicchat_jailbreak": [
+     138,
+     44,
+     0,
+     0
+    ],
+    "ultrachat_benign": [
+     0,
+     0,
+     7,
+     1992
+    ]
+   }
+  }
+ },
+ "base": {
+  "heldout": {
+   "at_0.5": [
+    2333,
+    253
+   ],
+   "auroc": 0.9558578986232606,
+   "macro": {
+    "tpr": 0.6628919669753112,
+    "fpr": 0.06253550579599604
+   },
+   "at_heldout_calibrated_thr": [
+    2227,
+    202
+   ],
+   "at_v5_fp_on_this_split": [
+    2227,
+    202
+   ],
+   "per_ds": {
+    "deepset": [
+     54,
+     77,
+     3,
+     191
+    ],
+    "dolly_benign": [
+     0,
+     0,
+     1,
+     999
+    ],
+    "email_benign": [
+     0,
+     0,
+     39,
+     1451
+    ],
+    "gandalf": [
+     498,
+     0,
+     0,
+     0
+    ],
+    "jailbreak_cls": [
+     59,
+     8,
+     1,
+     317
+    ],
+    "llmail_inj": [
+     158,
+     842,
+     0,
+     0
+    ],
+    "notinject": [
+     0,
+     0,
+     73,
+     89
+    ],
+    "oasst_benign": [
+     0,
+     0,
+     3,
+     997
+    ],
+    "ood_alpaca_benign": [
+     0,
+     0,
+     1,
+     999
+    ],
+    "ood_roleplay_benign": [
+     0,
+     0,
+     16,
+     1425
+    ],
+    "safeguard": [
+     1294,
+     241,
+     3,
+     3521
+    ],
+    "wild_jailbreak": [
+     270,
+     125,
+     0,
+     0
+    ],
+    "wild_regular_benign": [
+     0,
+     0,
+     113,
+     887
+    ]
+   }
+  },
+  "unseen": {
+   "at_0.5": [
+    2731,
+    90
+   ],
+   "auroc": 0.9729766341617839,
+   "macro": {
+    "tpr": 0.7689600121379508,
+    "fpr": 0.015333833583458396
+   },
+   "at_heldout_calibrated_thr": [
+    2616,
+    66
+   ],
+   "at_v5_fp_on_this_split": [
+    2645,
+    78
+   ],
+   "per_ds": {
+    "llmail_phase2_inj": [
+     715,
+     1285,
+     0,
+     0
+    ],
+    "ood_multilingual_inj": [
+     956,
+     18,
+     0,
+     0
+    ],
+    "rubend_jailbreak": [
+     36,
+     6,
+     0,
+     0
+    ],
+    "tensortrust_inj": [
+     902,
+     20,
+     0,
+     0
+    ],
+    "toxicchat_benign": [
+     0,
+     0,
+     86,
+     2914
+    ],
+    "toxicchat_jailbreak": [
+     122,
+     60,
+     0,
+     0
+    ],
+    "ultrachat_benign": [
+     0,
+     0,
+     4,
+     1995
+    ]
+   }
+  }
+ },
+ "v5": {
+  "heldout": {
+   "at_0.5": [
+    3198,
+    202
+   ],
+   "auroc": 0.9747611461377299,
+   "macro": {
+    "tpr": 0.793706662413307,
+    "fpr": 0.04537594995899399
+   },
+   "at_heldout_calibrated_thr": [
+    3196,
+    202
+   ],
+   "at_v5_fp_on_this_split": [
+    3196,
+    202
+   ],
+   "per_ds": {
+    "deepset": [
+     54,
+     77,
+     0,
+     194
+    ],
+    "dolly_benign": [
+     0,
+     0,
+     1,
+     999
+    ],
+    "email_benign": [
+     0,
+     0,
+     20,
+     1470
+    ],
+    "gandalf": [
+     498,
+     0,
+     0,
+     0
+    ],
+    "jailbreak_cls": [
+     57,
+     10,
+     3,
+     315
+    ],
+    "llmail_inj": [
+     929,
+     71,
+     0,
+     0
+    ],
+    "notinject": [
+     0,
+     0,
+     50,
+     112
+    ],
+    "oasst_benign": [
+     0,
+     0,
+     5,
+     995
+    ],
+    "ood_alpaca_benign": [
+     0,
+     0,
+     0,
+     1000
+    ],
+    "ood_roleplay_benign": [
+     0,
+     0,
+     15,
+     1426
+    ],
+    "safeguard": [
+     1400,
+     135,
+     3,
+     3521
+    ],
+    "wild_jailbreak": [
+     260,
+     135,
+     0,
+     0
+    ],
+    "wild_regular_benign": [
+     0,
+     0,
+     105,
+     895
+    ]
+   }
+  },
+  "unseen": {
+   "at_0.5": [
+    2763,
+    78
+   ],
+   "auroc": 0.9676458349922412,
+   "macro": {
+    "tpr": 0.7682631689955546,
+    "fpr": 0.013333833583458396
+   },
+   "at_heldout_calibrated_thr": [
+    2763,
+    78
+   ],
+   "at_v5_fp_on_this_split": [
+    2762,
+    78
+   ],
+   "per_ds": {
+    "llmail_phase2_inj": [
+     749,
+     1251,
+     0,
+     0
+    ],
+    "ood_multilingual_inj": [
+     956,
+     18,
+     0,
+     0
+    ],
+    "rubend_jailbreak": [
+     35,
+     7,
+     0,
+     0
+    ],
+    "tensortrust_inj": [
+     900,
+     22,
+     0,
+     0
+    ],
+    "toxicchat_benign": [
+     0,
+     0,
+     74,
+     2926
+    ],
+    "toxicchat_jailbreak": [
+     123,
+     59,
+     0,
+     0
+    ],
+    "ultrachat_benign": [
+     0,
+     0,
+     4,
+     1995
+    ]
+   }
+  }
+ }
+}

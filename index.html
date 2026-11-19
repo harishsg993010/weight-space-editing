@@ -249,13 +249,38 @@ footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-syste
 <p>Version 7 also helped with the problem I started with. On the NotInject messages, which are normal messages with scary words, false alarms went from 73 to 23 out of 162 with the normal cut-off. That is from 45% to 14%.</p>
 <p>Note: I should be honest about what version 7 is. The least squares gives almost all the weight to the new word average signal and very little to the model's own answer. So version 7 is mostly a new simple classifier which reads the model's internal state, written into the weights without training. It is not a small repair of the old answer like version 5 was.</p>
 <h3>Can editing go further?</h3>
-<p>I tested richer readouts outside the model. They also read the inner units of layers 9 and 10 for every word. The best ones reach the bottom of the full fine-tuning range on both sets, around 3,471 and 3,184. None of them was clearly better than full fine-tuning on both. I have not built these into the weights.</p>
+<p>I tested richer readouts outside the model. They also read the inner units of layers 9 and 10 for every word. The best ones reach the bottom of the full fine-tuning range on both sets, around 3,471 and 3,184. None of them was clearly better than full fine-tuning on both. I built one of them into the weights. That is version 8.</p>
+
+<h2>Version 8: one more signal</h2>
+<p>Version 7 reads only the word average going into the last layer. Version 8 adds a second signal from one layer earlier.</p>
+<ul>
+<li>In the layer before the last, every word has 3,072 inner units. I made that layer write one extra number for every word into an empty slot. The number is a score calculated from those inner units.</li>
+<li>The averaging head from version 7 now reads both things together: the word average and the average of this new score. It writes its answer into a second empty slot.</li>
+<li>The rest is the same as version 7. The last layer is blind to both slots, two small units read the answer exactly, and zero sits at the decision point.</li>
+</ul>
+<p>I also changed how the weights are calculated. Plain least squares cares about every message equally, even the easy ones. For version 8 I used a margin rule, which cares only about the messages near the decision line. I calculated it with about 12 rounds of weighted least squares. There are still no gradient steps on the model, but this is one more step away from the "averages only" rule.</p>
+<p>Version 8 changes 178,253 numbers. The real model and my calculation again agreed on every one of the 38,648 messages.</p>
+<div class="tw"><table>
+<tr><th>Model</th><th>Numbers changed</th><th>New examples from the 13 sources, attacks caught out of 3,626 (at 202 false alarms)</th><th>The 7 sources never seen, attacks caught out of 4,120 (at 78 false alarms)</th></tr>
+<tr><td>Training, same weights as version 5</td><td>15,365</td><td>3,276 to 3,301</td><td>2,735 to 2,825</td></tr>
+<tr><td>Training, last layer</td><td>5.3 million</td><td>3,329 to 3,339</td><td>2,554 to 2,731</td></tr>
+<tr><td>Version 7</td><td>162,118</td><td>3,420</td><td>3,179</td></tr>
+<tr><td>Version 8</td><td>178,253</td><td class="g">3,429</td><td class="g">3,231</td></tr>
+<tr><td>Full fine-tuning</td><td>184 million</td><td class="g">3,472 to 3,490</td><td class="g">3,177 to 3,295</td></tr>
+</table></div>
+<p>Version 8 is a small step forward, and it still does not beat full fine-tuning.</p>
+<ul>
+<li>On the 7 sources never seen, version 8 catches 52 more attacks than version 7. It is now ahead of the weakest full fine-tuning run (3,231 against 3,177) and behind the other two (3,290 and 3,295).</li>
+<li>On new examples from the 13 sources, it gains only 9 attacks. Full fine-tuning is still ahead by 43 to 61.</li>
+<li>The same readout outside the model gave 3,460 and 3,197. So the built version lost a little on the 13 sources and gained a little on the unseen ones. I think this is the effect of the rescaling inside the model, and I would not read much into it.</li>
+</ul>
+<p>With the normal cut-off, version 8 raises more false alarms than version 7. On new examples from the 13 sources it catches 3,420 attacks with 195 false alarms, where version 7 catches 3,397 with 163. On the 7 sources never seen it catches 3,319 with 96 false alarms. On NotInject it has 29 false alarms out of 162, where version 7 has 23. So with the normal cut-off, full fine-tuning is still the cleaner model.</p>
 
 <h2>Observations and Analysis</h2>
 <p>Looking inside the model before changing it was very useful. I found that the last part of the last layer throws away something the model already knows, and that told me exactly where to make the change.</p>
 <p>Changing a few thousand numbers by hand can give a big improvement on the type of data you used to build the change. It gives only a small improvement on new types of data.</p>
 <p>Normal fine-tuning on the same data beats the hand change of version 5. Even when training is allowed to touch only the same 15,363 numbers, it does as well or better.</p>
-<p>Version 7 changed this picture a little. With least squares and a better place to read from, editing beat the two limited kinds of training and came close to full fine-tuning. It did not beat full fine-tuning. The biggest improvement did not come from a better formula. It came from looking inside the model again and finding that the word average carries a much stronger signal than the single position I was reading.</p>
+<p>Version 7 changed this picture a little. With least squares and a better place to read from, editing beat the two limited kinds of training and came close to full fine-tuning. Version 8 added a second signal and moved a little closer. Neither of them beat full fine-tuning. The biggest improvement did not come from a better formula. It came from looking inside the model again and finding that the word average carries a much stronger signal than the single position I was reading.</p>
 <p>Note: Always compare your changed model with the original model at the same number of false alarms. Two times I had a better looking score but actually a worse model.</p>
 <p>Note: Always keep some data sources completely aside, and read the actual messages in your datasets. I removed one dataset because the original model marked 82% of its normal messages as attacks. When I read the messages, I could not tell its normal messages and attack messages apart myself. The labels were the problem and not the model.</p>
 
@@ -268,7 +293,8 @@ footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-syste
 <li>The model reads only the first 512 pieces of a message. If an attack is hidden late in a long email, no version can see it.</li>
 <li>While building version 7 I tried many variants and checked all of them on the same two test sets. So the version 7 numbers are a little optimistic. The full fine-tuning numbers did not get this advantage.</li>
 <li>Version 7 uses least squares, which is a step beyond the "averages only" rule I started with. It also changes about ten times more numbers than version 5.</li>
-<li>The model on Hugging Face is still version 5. I have not uploaded version 7.</li>
+<li>The model on Hugging Face is still version 5. I have not uploaded version 7 or version 8.</li>
+<li>Version 8 is one build. I ran it once and I did not try other settings for it.</li>
 <li>In the comparison with normal training, I did not tune the full fine-tuning settings and I ran only three seeds. A tuned run could do even better.</li>
 <li>For the 7 sources never seen, the cut-off in that comparison was set on those same messages, in the same way for every model. Also, the same weights and last layer models were scored by an exact calculation of the last layer and were not saved as models.</li>
 </ul>
@@ -287,7 +313,8 @@ modal run wsp_v4.py --stage bake --cfg 3.79   # version 5
 modal run wsp_probe.py --stage combo     # search for a better signal
 modal run wsp_v6.py                      # version 6
 modal run wsp_backprop.py                # compare with normal training
-modal run wsp_v7.py                      # version 7</code></pre>
+modal run wsp_v7.py                      # version 7
+modal run wsp_v8.py                      # version 8</code></pre>
 <p>The code which changes the weights is in <code>wsp_path.py</code>. It is about 120 lines. The numbers behind every table are in the <code>results</code> folder. The changed model (version 5) is on Hugging Face: <a href="https://huggingface.co/rootxhacker/deberta-v3-base-prompt-injection-v2-weight-edited">rootxhacker/deberta-v3-base-prompt-injection-v2-weight-edited</a>.</p>
 
 <h2>Credits and data</h2>
