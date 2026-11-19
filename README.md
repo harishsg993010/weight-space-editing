@@ -15,6 +15,7 @@ Gradient-free weight edits to `protectai/deberta-v3-base-prompt-injection-v2`, f
 | `wsp_probe.py` | Search for a signal that transfers across sources |
 | `wsp_v6.py` | Token-max attention-head circuit |
 | `wsp_backprop.py` | Comparison with backprop on the same data (same weights, last layer, full fine-tuning) |
+| `wsp_v7.py` | Word-average attention head, weights from least squares |
 | `wsp_upload.py` | Uploads the edited model to Hugging Face |
 | `results/` | Numeric results for every stage (no dataset text) |
 
