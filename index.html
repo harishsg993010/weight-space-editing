@@ -185,17 +185,17 @@ footer{margin-top:4rem;color:var(--muted);font:13.5px/1.5 system-ui,-apple-syste
 <div class="tw"><table>
 <tr><th>Model</th><th>Numbers changed</th><th>New examples from the 13 sources, attacks caught out of 3,626 (at 202 false alarms)</th><th>The 7 sources never seen, attacks caught out of 4,120 (at 78 false alarms)</th></tr>
 <tr><td>Original model</td><td>0</td><td>2,227</td><td>2,645</td></tr>
-<tr><td>Version 5 (by hand)</td><td>15,363</td><td>3,196</td><td>2,762</td></tr>
+<tr><td>Version 5 (by hand)</td><td>15,363</td><td>3,198</td><td>2,763</td></tr>
 <tr><td>Training, same weights</td><td>15,365</td><td>3,276 to 3,301</td><td>2,735 to 2,825</td></tr>
 <tr><td>Training, last layer</td><td>5.3 million</td><td>3,329 to 3,339</td><td class="b">2,554 to 2,731</td></tr>
 <tr><td>Full fine-tuning</td><td>184 million</td><td class="g">3,472 to 3,490</td><td class="g">3,177 to 3,295</td></tr>
 </table></div>
 <p class="cap">"3,276 to 3,301" is the lowest and highest result of the three runs. The same weights row has 15,365 numbers because version 5 also moved the two final bias numbers.</p>
 <p>So the answer is no. My hand change does not beat normal training.</p>
-<p>Full fine-tuning is better on both sets. On the 7 sources it never saw, it catches around 400 to 500 more attacks than version 5 with the same 78 false alarms. With the normal cut-off it also raises fewer false alarms on the first set, 112 to 127 against 202 for version 5.</p>
+<p>Full fine-tuning is better on both sets. On the 7 sources it never saw, it catches around 410 to 530 more attacks than version 5 with the same 78 false alarms. With the normal cut-off it also raises fewer false alarms on the first set, 112 to 127 against 202 for version 5.</p>
 <p>The same weights row is the closest comparison, because it has the same budget as my change. On new examples from the 13 sources, training won in all three runs. On the 7 sources never seen it is a tie. Two runs were better than version 5 and one run was worse.</p>
 <p>There is one place where the hand change did better. Training only the last layer was worse than version 5 on the 7 sources never seen, in all three runs. It learned my 13 sources well but it carried less of that to new sources.</p>
-<p>Two more things I noticed about full fine-tuning. Most of its improvement on the 7 sources came from LLMail-Inject phase 2, where it went from 715 attacks caught to around 1,300. Those emails are close to the phase 1 emails it trained on. And in one run it lost some attacks in other languages, going from 956 caught to 917.</p>
+<p>Two more things I noticed about full fine-tuning. Most of its improvement on the 7 sources came from LLMail-Inject phase 2, where it went from 715 attacks caught to between 1,155 and 1,302. Those emails are close to the phase 1 emails it trained on. And in all three runs it lost some attacks in other languages, going from 956 caught to around 915.</p>
 
 <h2>Observations and Analysis</h2>
 <p>Looking inside the model before changing it was very useful. I found that the last part of the last layer throws away something the model already knows, and that told me exactly where to make the change.</p>
